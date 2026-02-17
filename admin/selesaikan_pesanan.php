@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     if ($order) {
         $id_m = $order['id_member'];
         $total = $order['total_transaksi'];
-        
+
         // RUMUS POIN: Setiap belanja Rp 1.000 dapat 1 Poin (Bisa kamu ganti sendiri)
         $poin_baru = floor($total / 1000);
 
@@ -33,6 +33,19 @@ if (isset($_GET['id'])) {
                 $ket = "Poin dari transaksi " . $id_p;
                 $conn->prepare($sql_histori)->execute([$id_m, $poin_baru, $ket]);
             }
+            
+            // Logika Kenaikan Level Otomatis
+            $current_poin = $conn->query("SELECT total_poin FROM tb_member WHERE id_member = $id_m")->fetchColumn();
+
+            if ($current_poin >= 2000) {
+                $new_level = 3; // Contoh ID Level Gold
+            } elseif ($current_poin >= 1000) {
+                $new_level = 2; // Contoh ID Level Silver
+            } else {
+                $new_level = 1; // Bronze
+            }
+
+            $conn->prepare("UPDATE tb_member SET id_level = ? WHERE id_member = ?")->execute([$new_level, $id_m]);
 
             $conn->commit();
             echo "<script>alert('Pesanan Selesai! Member mendapatkan $poin_baru poin.'); window.location='data_pesanan.php';</script>";
