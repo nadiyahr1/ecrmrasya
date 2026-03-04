@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
             $conn->prepare("UPDATE tb_pesanan SET status = ? WHERE id_pesanan = ?")->execute([$status_baru, $id_p]);
 
             echo "<script>
-                    alert('Pesanan Diverifikasi! Status sekarang: $status_baru');
+                    alert('Pesanan Dikonfirmasi! Status sekarang: $status_baru');
                     // Gunakan perintah ini untuk membuka struk
                     var strukWindow = window.open('cetak_struk.php?id=$id_p', '_blank');
             
@@ -28,10 +28,10 @@ if (isset($_GET['id'])) {
                     if(!strukWindow || strukWindow.closed || typeof strukWindow.closed=='undefined') { 
                     alert('Pop-up diblokir! Silahkan izinkan pop-up di browser kamu atau buka manual.');
                     }
-                    window.location='data_pesanan.php';
+                    window.location='index.php?page=data_pesanan';
                   </script>";
         } catch (PDOException $e) {
-            echo "Gagal verifikasi: " . $e->getMessage();
+            echo "Gagal Konfirmasi: " . $e->getMessage();
         }
     }
 }

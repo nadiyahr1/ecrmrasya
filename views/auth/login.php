@@ -18,12 +18,12 @@
 
 <div class="login-container">
     <h2>Login Rasya.co</h2>
-    <form action="../../controllers/AuthController.php" method="POST">
+    <form action="index.php?controller=auth&action=prosesLogin" method="POST">
         <input type="hidden" name="action" value="login">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Masuk</button>
-        <p style="text-align:center;">Belum punya akun? <a href="registrasi.php">Daftar</a></p>
+        <p style="text-align:center;">Belum punya akun? <a href="index.php?controller=auth&action=register">Daftar</a></p>
     </form>
 </div>
 

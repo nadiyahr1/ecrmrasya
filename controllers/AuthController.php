@@ -1,19 +1,32 @@
 <?php
-session_start();
-require_once '../config/koneksi.php';
+class AuthController
+{
+    private $conn;
 
-$action = $_POST['action'] ?? '';
+    public function __construct()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        require_once __DIR__ . '/../config/koneksi.php';
+        $this->conn = $conn;
+    }
 
-    // LOGIN
-    if ($action == 'login') {
+    // FORM LOGIN
+    public function login()
+    {
+        require_once 'views/auth/login.php';
+    }
 
-        $user_input = $_POST['username'];
-        $pass_input = $_POST['password'];
+    // PROSES LOGIN
+    public function prosesLogin()
+    {
+        $user_input = $_POST['username'] ?? '';
+        $pass_input = $_POST['password'] ?? '';
 
-        // 1. CEK TB_USER (Admin & Owner)
-        $stmt = $conn->prepare("SELECT * FROM tb_user WHERE username = ?");
+        // CEK ADMIN / OWNER
+        $stmt = $this->conn->prepare("SELECT * FROM tb_user WHERE username = ?");
         $stmt->execute([$user_input]);
         $user = $stmt->fetch();
 
@@ -23,16 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['nama']    = $user['nama_user'];
             $_SESSION['role']    = $user['role'];
 
-            if ($user['role'] == 'Admin') {
-                header("Location: ../admin/index.php");
-            } else {
-                header("Location: ../owner/dashboard.php");
-            }
+            // 🔥 SEMENTARA (biar tidak keluar MVC)
+            header("Location: index.php?controller=home&action=index");
             exit;
         }
 
-        // 2. CEK TB_MEMBER (Pelanggan)
-        $stmt_member = $conn->prepare("SELECT * FROM tb_member WHERE username = ?");
+        // CEK MEMBER
+        $stmt_member = $this->conn->prepare("SELECT * FROM tb_member WHERE username = ?");
         $stmt_member->execute([$user_input]);
         $member = $stmt_member->fetch();
 
@@ -45,25 +55,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['role']      = 'Pelanggan';
                 $_SESSION['id_level']  = $member['id_level'];
 
-                header("Location: ../index.php");
+                header("Location: index.php?controller=home&action=index");
                 exit;
 
             } else {
-                echo "<script>alert('Akun belum aktif'); 
-                      window.location='../views/auth/login.php';</script>";
+                echo "<script>alert('Akun belum aktif'); window.location='index.php?controller=auth&action=login';</script>";
                 exit;
             }
         }
 
         // LOGIN GAGAL
-        echo "<script>alert('Username atau Password salah!'); 
-              window.location='../views/auth/login.php';</script>";
-        exit;
+        echo "<script>alert('Username atau Password salah!'); window.location='index.php?controller=auth&action=login';</script>";
     }
 
-    // REGISTRASI
-    if ($action == 'register') {
+    // FORM REGISTER
+    public function register()
+    {
+        require_once 'views/auth/registrasi.php';
+    }
 
+    // PROSES REGISTER
+    public function prosesRegister()
+    {
         $nama     = $_POST['nama'];
         $username = $_POST['username'];
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -75,24 +88,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     (id_level, poin, nama_member, username, password, no_telp, total_poin, status_akun) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $stmt = $conn->prepare($sql);
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute([1, 0, $nama, $username, $password, $no_telp, 0, 'Aktif']);
 
-            echo "<script>alert('Registrasi berhasil! Silakan login.'); 
-                  window.location='../views/auth/login.php';</script>";
+            echo "<script>alert('Registrasi berhasil!'); window.location='index.php?controller=auth&action=login';</script>";
 
         } catch (PDOException $e) {
 
             if ($e->getCode() == 23000) {
-                echo "<script>alert('Username sudah digunakan!'); 
-                      window.history.back();</script>";
+                echo "<script>alert('Username sudah digunakan!'); window.history.back();</script>";
             } else {
                 echo "Error: " . $e->getMessage();
             }
         }
-
-        exit;
     }
-
 }
-?>

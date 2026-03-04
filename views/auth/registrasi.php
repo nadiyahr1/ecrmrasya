@@ -14,7 +14,7 @@
 
 <div class="regis-container">
     <h2>Daftar Member Baru</h2>
-    <form action="../../controllers/AuthController.php" method="POST">
+    <form action="index.php?controller=auth&action=prosesRegister" method="POST">
         <input type="hidden" name="action" value="register">
         <input type="text" name="nama" placeholder="Nama Lengkap" required>
         <input type="text" name="username" placeholder="Username untuk Login" required>
@@ -22,7 +22,7 @@
         <input type="text" name="no_telp" placeholder="Nomor Telepon/WA" required>
         <button type="submit">Daftar Sekarang</button>
     </form>
-    <p style="text-align:center;"><a href="index.php">Sudah punya akun? Login</a></p>
+    <p style="text-align:center;"><a href="index.php?controller=auth&action=login">Sudah punya akun? Login</a></p>
 </div>
 
 </body>
