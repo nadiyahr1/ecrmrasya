@@ -1,19 +1,20 @@
 <?php
 require_once __DIR__ . '/../config/koneksi.php';
 
-class CheckoutModel {
+class CheckoutModel
+{
 
     private $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $conn;
         $this->conn = $conn;
     }
 
-    // ==========================
     // MEMBER
-    // ==========================
-    public function getMember($id_member) {
+    public function getMember($id_member)
+    {
         $stmt = $this->conn->prepare("
             SELECT m.*, l.diskon, l.nama_level 
             FROM tb_member m
@@ -24,45 +25,41 @@ class CheckoutModel {
         return $stmt->fetch();
     }
 
-    // ==========================
     // MENU
-    // ==========================
-    public function getMenuById($id) {
+    public function getMenuById($id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM tb_menu WHERE id_menu = ?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
 
-    // ==========================
     // FASILITAS
-    // ==========================
-    public function getFasilitasById($id) {
+    public function getFasilitasById($id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM tb_fasilitas WHERE id_fasilitas = ?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
 
-    // ==========================
     // MEJA
-    // ==========================
-    public function getMejaTersedia() {
+    public function getMejaTersedia()
+    {
         return $this->conn->query("SELECT * FROM tb_meja WHERE status='Tersedia'")->fetchAll();
     }
 
-    // ==========================
     // INSERT PESANAN
-    // ==========================
-    public function insertPesanan($data) {
+    public function insertPesanan($data)
+    {
         $stmt = $this->conn->prepare("
             INSERT INTO tb_pesanan 
             (id_pesanan, id_member, id_meja, id_promo, tgl_pesanan, total_transaksi, tipe_pemesanan, metode_pembayaran, catatan, status) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Menunggu Konfirmasi')
         ");
-
         return $stmt->execute($data);
     }
 
-    public function insertDetailMenu($data) {
+    public function insertDetailMenu($data)
+    {
         return $this->conn->prepare("
             INSERT INTO tb_detail_pesanan 
             (id_pesanan, id_menu, jumlah, subtotal) 
@@ -70,13 +67,15 @@ class CheckoutModel {
         ")->execute($data);
     }
 
-    public function updateStokMenu($qty, $id_menu) {
+    public function updateStokMenu($qty, $id_menu)
+    {
         return $this->conn->prepare("
             UPDATE tb_menu SET stok = stok - ? WHERE id_menu = ?
         ")->execute([$qty, $id_menu]);
     }
 
-    public function insertFasilitas($data) {
+    public function insertFasilitas($data)
+    {
         return $this->conn->prepare("
             INSERT INTO tb_booking_fasilitas 
             (id_pesanan, id_fasilitas, tgl_sewa, jam_mulai, durasi_jam, jumlah_orang, subtotal_sewa) 
@@ -84,7 +83,8 @@ class CheckoutModel {
         ")->execute($data);
     }
 
-    public function updatePoin($poin, $id_member) {
+    public function updatePoin($poin, $id_member)
+    {
         $this->conn->prepare("
             UPDATE tb_member SET poin = poin + ? WHERE id_member = ?
         ")->execute([$poin, $id_member]);
@@ -95,27 +95,47 @@ class CheckoutModel {
         ")->execute([$id_member, $poin]);
     }
 
-    public function updateMeja($id_meja) {
+    public function updateMeja($id_meja)
+    {
         return $this->conn->prepare("
             UPDATE tb_meja SET status='Dipakai' WHERE id_meja=?
         ")->execute([$id_meja]);
     }
 
-    public function getPromo($id) {
+    // KOSONGKAN KERANJANG DI DATABASE
+    public function clearKeranjang($id_member)
+    {
+        $this->conn->prepare("
+            UPDATE tb_member SET data_keranjang = NULL WHERE id_member = ?
+        ")->execute([$id_member]);
+    }
+    public function getPromo($id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM tb_promo WHERE id_promo=?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
 
-    public function begin() {
+    // PROMO LOYALTY
+    public function getPromoLoyalty()
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM tb_promo WHERE tipe_promo = 'Loyalty' AND status_promo = 'Aktif'");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function begin()
+    {
         $this->conn->beginTransaction();
     }
 
-    public function commit() {
+    public function commit()
+    {
         $this->conn->commit();
     }
 
-    public function rollback() {
+    public function rollback()
+    {
         $this->conn->rollBack();
     }
 }

@@ -24,7 +24,12 @@ switch ($controller) {
         require_once 'controllers/MenuController.php';
         $c = new MenuController();
         break;
-        
+
+    case 'pelanggan':
+        require_once 'controllers/PelangganController.php';
+        $c = new PelangganController();
+        break;
+
     case 'home':
     default:
         require_once 'controllers/HomeController.php';

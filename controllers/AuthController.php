@@ -36,7 +36,6 @@ class AuthController
             $_SESSION['nama']    = $user['nama_user'];
             $_SESSION['role']    = $user['role'];
 
-            // 🔥 SEMENTARA (biar tidak keluar MVC)
             header("Location: index.php?controller=home&action=index");
             exit;
         }
@@ -48,20 +47,34 @@ class AuthController
 
         if ($member && password_verify($pass_input, $member['password'])) {
 
-            if ($member['status_akun'] == 'Aktif') {
-
-                $_SESSION['id_member'] = $member['id_member'];
-                $_SESSION['nama']      = $member['nama_member'];
-                $_SESSION['role']      = 'Pelanggan';
-                $_SESSION['id_level']  = $member['id_level'];
-
-                header("Location: index.php?controller=home&action=index");
-                exit;
-
-            } else {
+            if ($member['status_akun'] == 'Nonaktif') {
                 echo "<script>alert('Akun belum aktif'); window.location='index.php?controller=auth&action=login';</script>";
                 exit;
             }
+
+            // Set Session Login
+            $_SESSION['id_member'] = $member['id_member'];
+            $_SESSION['nama']      = $member['nama_member'];
+            $_SESSION['role']      = 'Pelanggan';
+
+            // KODE TAMBAHAN STEP 3: TARIK DATA KERANJANG
+            $stmt_cart = $this->conn->prepare("SELECT data_keranjang FROM tb_member WHERE id_member = ?");
+            $stmt_cart->execute([$member['id_member']]);
+            $row_cart = $stmt_cart->fetch();
+
+            if (!empty($row_cart['data_keranjang'])) {
+                $cart_data = json_decode($row_cart['data_keranjang'], true);
+
+                if (isset($cart_data['menu'])) {
+                    $_SESSION['keranjang'] = $cart_data['menu'];
+                }
+                if (isset($cart_data['fasilitas'])) {
+                    $_SESSION['keranjang_fasilitas'] = $cart_data['fasilitas'];
+                }
+            }
+
+            header("Location: index.php?controller=home&action=index");
+            exit;
         }
 
         // LOGIN GAGAL
@@ -92,7 +105,6 @@ class AuthController
             $stmt->execute([1, 0, $nama, $username, $password, $no_telp, 0, 'Aktif']);
 
             echo "<script>alert('Registrasi berhasil!'); window.location='index.php?controller=auth&action=login';</script>";
-
         } catch (PDOException $e) {
 
             if ($e->getCode() == 23000) {
