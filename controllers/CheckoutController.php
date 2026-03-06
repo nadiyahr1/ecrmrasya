@@ -19,18 +19,60 @@ class CheckoutController
     }
 
     // HALAMAN CHECKOUT
+    // HALAMAN CHECKOUT
     public function index()
     {
         $this->startSession();
 
-        $checkout_menu = $_POST['selected_menu'] ?? [];
-        $checkout_fasilitas = $_POST['selected_fasilitas'] ?? [];
+        // 1. Proteksi Halaman
+        if (!isset($_SESSION['id_member'])) {
+            header("Location: index.php?controller=auth&action=login");
+            exit;
+        }
 
+        $id_member = $_SESSION['id_member'];
+
+        // 2. Tangkap Data dari Keranjang
+        $selected_menu = $_POST['selected_menu'] ?? [];
+        $selected_fasilitas = $_POST['selected_fasilitas'] ?? [];
+
+        if (empty($selected_menu) && empty($selected_fasilitas)) {
+            echo "<script>alert('Pilih minimal 1 item untuk checkout!'); window.location='index.php?controller=keranjang&action=index';</script>";
+            exit;
+        }
+
+        // 3. Ambil Semua Data yang Dibutuhkan View melalui Model
+        $user = $this->model->getMember($id_member);
+        $mejas = $this->model->getMejaTersedia();
+        $promos = $this->model->getPromoLoyalty();
+
+        // Siapkan detail menu yang dipilih
+        $menus = [];
+        foreach ($selected_menu as $id) {
+            $m = $this->model->getMenuById($id);
+            if ($m) {
+                $menus[$id] = $m;
+            }
+        }
+
+        // Siapkan detail fasilitas yang dipilih
+        $fasilitas_data = [];
+        foreach ($selected_fasilitas as $id) {
+            $f = $this->model->getFasilitasById($id);
+            if ($f) {
+                $fasilitas_data[$id] = $f;
+            }
+        }
+
+        $ada_fasilitas = !empty($selected_fasilitas);
+
+        // 4. Panggil View (semua variabel di atas akan otomatis terbaca di dalam view)
         require_once __DIR__ . '/../views/transaksi/checkout.php';
     }
     public function simpanPesanan()
     {
-        session_start();
+        // 1. PERBAIKAN: Gunakan method internal agar tidak terjadi bentrok session
+        $this->startSession();
 
         date_default_timezone_set('Asia/Jakarta');
 
@@ -40,10 +82,11 @@ class CheckoutController
             exit;
         }
 
-        $checkout_menu = $_POST['selected_menu'] ?? [];
-        $checkout_fasilitas = $_POST['selected_fasilitas'] ?? [];
+        // 2. PERBAIKAN: Sesuaikan dengan nama variabel di View kamu (selected_menu)
+        $selected_menu = $_POST['checkout_menu'] ?? [];
+        $selected_fasilitas = $_POST['checkout_fasilitas'] ?? [];
 
-        if (empty($checkout_menu) && empty($checkout_fasilitas)) {
+        if (empty($selected_menu) && empty($selected_fasilitas)) {
             echo "<script>alert('Pilih minimal 1 item!'); window.location='index.php?controller=keranjang&action=index';</script>";
             exit;
         }
@@ -55,11 +98,14 @@ class CheckoutController
         $tipe_pemesanan = $_POST['tipe_pemesanan'] ?? 'Dine-in';
         $metode_bayar   = $_POST['metode'] ?? '';
         $catatan        = $_POST['catatan'] ?? '';
-        $id_meja        = $_POST['id_meja'] ?? null;
-        $id_voucher     = $_POST['id_voucher'] ?? null;
+
+        // 3. PERBAIKAN: Jika form kosong, pastikan nilainya NULL agar tidak error Foreign Key di MySQL
+        $id_meja        = !empty($_POST['id_meja']) ? $_POST['id_meja'] : null;
+        $id_voucher     = !empty($_POST['id_voucher']) ? $_POST['id_voucher'] : null;
 
         if (empty($metode_bayar)) {
-            die("Metode pembayaran wajib dipilih");
+            echo "<script>alert('Metode pembayaran wajib dipilih!'); window.history.back();</script>";
+            exit;
         }
 
         try {
@@ -68,33 +114,29 @@ class CheckoutController
             $subtotal = 0;
 
             // MENU
-            foreach ($checkout_menu as $id) {
+            foreach ($selected_menu as $id) {
                 if (isset($_SESSION['keranjang'][$id])) {
                     $qty = $_SESSION['keranjang'][$id];
-
                     $m = $this->model->getMenuById($id);
-
                     if ($m) {
                         $subtotal += $m['harga'] * $qty;
                     }
                 }
             }
+
             // FASILITAS
-            foreach ($checkout_fasilitas as $id) {
+            foreach ($selected_fasilitas as $id) {
                 if (isset($_SESSION['keranjang_fasilitas'][$id])) {
                     $item = $_SESSION['keranjang_fasilitas'][$id];
-
                     $f = $this->model->getFasilitasById($id);
-
                     if ($f) {
                         $subtotal += $f['harga'] * $item['pengali'];
                     }
                 }
             }
 
-            // MEMBER
+            // MEMBER (Diskon & Pajak)
             $u = $this->model->getMember($id_member);
-
             $disc_level = $subtotal * ($u['diskon'] / 100);
             $pajak = $subtotal * 0.1;
             $total_final = ($subtotal + $pajak) - $disc_level;
@@ -102,17 +144,19 @@ class CheckoutController
             // PROMO
             if ($id_voucher) {
                 $promo = $this->model->getPromo($id_voucher);
-
                 if ($promo) {
                     $diskon_promo = ($promo['tipe_potongan'] == 'Persen')
-                        ? $subtotal * ($promo['potongan'] / 100)
+                        ? $total_final * ($promo['potongan'] / 100)
                         : $promo['potongan'];
 
                     $total_final -= $diskon_promo;
+
+                    // Proteksi agar total tidak jadi minus
+                    if ($total_final < 0) $total_final = 0;
                 }
             }
 
-            // INSERT PESANAN
+            // INSERT PESANAN UTAMA (Urutan ini sudah SANGAT TEPAT dengan di Model)
             $this->model->insertPesanan([
                 $id_pesanan,
                 $id_member,
@@ -125,8 +169,8 @@ class CheckoutController
                 $catatan
             ]);
 
-            // DETAIL MENU
-            foreach ($checkout_menu as $id_m) {
+            // INSERT DETAIL MENU
+            foreach ($selected_menu as $id_m) {
                 if (isset($_SESSION['keranjang'][$id_m])) {
                     $qty = $_SESSION['keranjang'][$id_m];
                     $m = $this->model->getMenuById($id_m);
@@ -137,13 +181,13 @@ class CheckoutController
                         $this->model->insertDetailMenu([$id_pesanan, $id_m, $qty, $sub]);
                         $this->model->updateStokMenu($qty, $id_m);
 
-                        unset($_SESSION['keranjang'][$id_m]);
+                        unset($_SESSION['keranjang'][$id_m]); // Hapus item dari keranjang
                     }
                 }
             }
 
-            // FASILITAS
-            foreach ($checkout_fasilitas as $id_f) {
+            // INSERT DETAIL FASILITAS
+            foreach ($selected_fasilitas as $id_f) {
                 if (isset($_SESSION['keranjang_fasilitas'][$id_f])) {
                     $item = $_SESSION['keranjang_fasilitas'][$id_f];
                     $f = $this->model->getFasilitasById($id_f);
@@ -161,30 +205,35 @@ class CheckoutController
                             $sub_f
                         ]);
 
-                        unset($_SESSION['keranjang_fasilitas'][$id_f]);
+                        unset($_SESSION['keranjang_fasilitas'][$id_f]); // Hapus fasilitas dari keranjang
                     }
                 }
             }
 
-            // POIN
-            $poin = floor($total_final / 10000);
-            $this->model->updatePoin($poin, $id_member);
+            // UPDATE POIN LOYALTY (Reward)
+            $poin = floor($total_final / 10000); // Tiap kelipatan 10.000 dapat 1 poin
+            if ($poin > 0) {
+                $this->model->updatePoin($poin, $id_member);
+            }
 
-            // MEJA
+            // UPDATE MEJA
             if ($id_meja) {
                 $this->model->updateMeja($id_meja);
             }
 
+            $this->model->clearKeranjang($id_member);
+            
             $this->model->commit();
 
-            header("Location: index.php?controller=pelanggan&action=profil");
+            // 4. PERBAIKAN UX: Berikan alert sukses sebelum berpindah halaman
+            echo "<script>alert('Berhasil! Pesanan Anda telah dibuat.'); window.location='index.php?controller=checkout&action=riwayat';</script>";
             exit;
         } catch (Exception $e) {
             $this->model->rollback();
-            die("Error: " . $e->getMessage());
+            die("Error saat memproses pesanan: " . $e->getMessage());
         }
+        
     }
-
     public function riwayat()
     {
         session_start();

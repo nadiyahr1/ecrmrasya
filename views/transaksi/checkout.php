@@ -1,36 +1,10 @@
 <?php
 include 'layout/header.php';
 
-// data dari controller
-// $user
-// $selected_menu
-// $selected_fasilitas
-// $keranjang
-// $keranjang_fasilitas
-// $menus
-// $fasilitas_data
-// $mejas
-// $promos
-
-// Proteksi Login Member
-if (!isset($_SESSION['id_member'])) {
-    header("Location: index.php?controller=auth&action=login");
-    exit;
-}
-
-// 1. TANGKAP DATA ITEM YANG DICENTANG DARI KERANJANG
-$selected_menu = $_POST['selected_menu']?? [];
-$selected_fasilitas = $_POST['selected_fasilitas'] ?? [];
-
-$id_m = $_SESSION['id_member'];
-// Ambil data member & diskon level
-$stmt->execute([$id_m]);
-$user = $stmt->fetch();
-
+// Inisialisasi variabel untuk perhitungan (Data lainnya sudah dikirim otomatis dari Controller)
 $sub_m = 0;
 $qty_m = 0;
 $sub_f = 0;
-// $ada_fasilitas = !empty($selected_fasilitas);
 ?>
 
 <form action="index.php?controller=checkout&action=simpanPesanan" method="POST">
@@ -46,7 +20,6 @@ $sub_f = 0;
     <div style="padding: 70px 20px; display: flex; gap: 30px; align-items: flex-start; background: #fdfdfd; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         <div style="flex: 2; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
             <h2 style="margin: 0;">Checkout</h2>
-
 
             <section style="margin-bottom: 30px;">
                 <h3 style="border-left: 5px solid #6F4E37; padding-left: 10px;">1. Informasi Pemesan</h3>
@@ -64,7 +37,7 @@ $sub_f = 0;
                         foreach ($selected_menu as $id):
                             if (isset($_SESSION['keranjang'][$id])):
                                 $q = $_SESSION['keranjang'][$id];
-                                $m = $menus [$id];
+                                $m = $menus[$id];
                                 $sub_m += ($m['harga'] * $q);
                                 $qty_m += $q;
                     ?>
@@ -79,7 +52,6 @@ $sub_f = 0;
                     <?php
                             endif;
                         endforeach;
-                    // endif;
                     ?>
 
                     <?php
@@ -102,7 +74,6 @@ $sub_f = 0;
                     <?php
                             endif;
                         endforeach;
-                    // endif;
                     ?>
                 </div>
             </section>
@@ -189,7 +160,7 @@ $sub_f = 0;
                     </div>
                     <?php
                     $pajak = ($sub_m + $sub_f) * 0.1;
-                    $disc_level = ($sub_m + $sub_f) * ($user['diskon_level'] / 100);
+                    $disc_level = ($sub_m + $sub_f) * ($user['diskon'] / 100);
                     ?>
                     <div style="display: flex; justify-content: space-between;">
                         <span>Pajak & Layanan (10%)</span> <span>Rp <?= number_format($pajak) ?></span>
@@ -270,7 +241,8 @@ $sub_f = 0;
     let totalBase = <?= $total_awal ?>;
 
     function toggleMeja(show) {
-        document.getElementById('area_meja').style.display = show ? 'block' : 'none';
+        // PERBAIKAN: Mengubah ID agar sesuai dengan ID elemen HTML kamu (mejaBox)
+        document.getElementById('mejaBox').style.display = show ? 'block' : 'none';
     }
 
     function toggleNote(cek) {

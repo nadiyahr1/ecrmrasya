@@ -4,28 +4,30 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/../config/koneksi.php';
-global $conn;
+global $conn; 
 
 $base_url = "http://localhost/ecrmrasya/";
 
-// Ambil data member jika sudah login
 $nama_tampil = "";
 $level_tampil = "";
 
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'Pelanggan') {
-    $id_m = $_SESSION['id_member'];
-    $stmt = $conn->prepare("
-        SELECT m.nama_member, l.nama_level 
-        FROM tb_member m 
-        JOIN tb_level_member l ON m.id_level = l.id_level 
-        WHERE m.id_member = ?
-    ");
-    $stmt->execute([$id_m]);
+if (isset($_SESSION['id_member'])) {
+    $id_log = $_SESSION['id_member'];
+    
+    if ($conn) {
+        $stmt_nav = $conn->prepare("
+            SELECT m.nama_member, l.nama_level 
+            FROM tb_member m 
+            JOIN tb_level_member l ON m.id_level = l.id_level 
+            WHERE m.id_member = ?
+        ");
+        $stmt_nav->execute([$id_log]);
+        $user_nav = $stmt_nav->fetch();
 
-    if ($stmt->rowCount() > 0) {
-        $user_data = $stmt->fetch();
-        $nama_tampil = $user_data['nama_member'];
-        $level_tampil = $user_data['nama_level'];
+        if ($user_nav) {
+            $nama_tampil = $user_nav['nama_member'];
+            $level_tampil = $user_nav['nama_level'];
+        }
     }
 }
 ?>
@@ -174,7 +176,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'Pelanggan') {
                         <a href="<?= $base_url ?>index.php?controller=pelanggan&action=profil">
                             👤 Profil Saya
                         </a>
-                        <a href="<?= $base_url ?>logout.php" style="color: red !important;">
+                        <a href="logout.php" style="color: red !important;">
                             🚪 Keluar
                         </a>
                     </div>

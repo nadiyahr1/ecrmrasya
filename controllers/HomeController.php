@@ -1,14 +1,13 @@
 <?php
 require_once 'config/koneksi.php';
 
-class HomeController {
+class HomeController
+{
 
-    public function index() {
+    public function index()
+    {
         global $conn;
 
-        // ==========================
-        // AMBIL DATA (PINDAHAN DARI INDEX LAMA)
-        // ==========================
         $kategori = $conn->query("SELECT * FROM tb_kategori")->fetchAll();
 
         $menus = $conn->query("
@@ -39,10 +38,8 @@ class HomeController {
         } catch (Exception $e) {
             $ulasan = [];
         }
-
-        // ==========================
-        // KIRIM KE VIEW
-        // ==========================
-        require 'views/home/index.php';
+        require_once 'layout/header.php'; 
+        require_once 'views/home/index.php';
+        require_once 'layout/footer.php';
     }
 }

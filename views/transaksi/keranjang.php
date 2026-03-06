@@ -19,11 +19,8 @@ if ($cek_menu && $cek_fasilitas): ?>
 endif; ?>
 
 <div style="max-width: 1000px; margin: 30px auto; padding: 70px 30px; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-
     <h2 style="color: #333; margin-bottom: 25px;">🛒 Keranjang Belanja Anda</h2>
-
     <form action="index.php?controller=checkout&action=index" method="POST" id="form-keranjang">
-
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="border-bottom: 2px solid #eee;">
@@ -64,12 +61,11 @@ endif; ?>
                         </td>
 
                         <td align="center">
-                            <!-- UPDATE via CONTROLLER -->
-                            <form action="index.php?controller=keranjang&action=update" method="POST">
-                                <input type="hidden" name="id_menu" value="<?= $m['id_menu'] ?>">
-                                <input type="number" name="qty" value="<?= $m['qty'] ?>" min="1" style="width:60px;">
-                                <button type="submit">Update</button>
-                            </form>
+                            <input type="number"
+                                value="<?= $m['qty'] ?>"
+                                min="1"
+                                style="width:65px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;"
+                                onchange="updateQtyOtomatis('<?= $m['id_menu'] ?>', this.value)">
                         </td>
 
                         <td align="right">
@@ -140,13 +136,33 @@ endif; ?>
 
         <div style="margin-top:30px; display:flex; justify-content:space-between;">
             <a href="<?= $base_url ?>index.php?controller=home&action=index"">← Kembali</a>
-            <button type="submit" id="btn-checkout">Checkout →</button>
+            <button type=" submit" id="btn-checkout">Checkout →</button>
         </div>
 
     </form>
 </div>
 
 <script>
+    function updateQtyOtomatis(id_menu, qty) {
+        if (qty < 1) return; // Proteksi agar tidak nol
+
+        // Fetch API (AJAX modern) untuk kirim data ke Controller
+        let formData = new FormData();
+        formData.append('id_menu', id_menu);
+        formData.append('qty', qty);
+
+        fetch('index.php?controller=keranjang&action=update', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Setelah sukses update di session, refresh halaman agar subtotal & total berubah
+                    window.location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
     document.addEventListener('DOMContentLoaded', function() {
 
         const checkAll = document.getElementById('check-all');

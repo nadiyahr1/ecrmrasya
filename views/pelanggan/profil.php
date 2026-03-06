@@ -1,12 +1,4 @@
 <?php
-session_start();
-require_once '../config/koneksi.php';
-include '../layout/header.php';
-
-$id_m = $_SESSION['id_member'];
-$stmt = $conn->prepare("SELECT m.*, l.nama_level FROM tb_member m JOIN tb_level_member l ON m.id_level = l.id_level WHERE m.id_member = ?");
-$stmt->execute([$id_m]);
-$user = $stmt->fetch();
 
 // Logika Tab
 $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
@@ -57,9 +49,9 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
     </div>
 
     <div style="display: flex; gap: 30px; margin: 40px 0 20px 0; border-bottom: 2px solid #eee;">
-        <a href="?tab=riwayat" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'riwayat' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'riwayat' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Riwayat Pesanan</a>
-        <a href="?tab=voucher" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'voucher' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'voucher' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Voucher Saya</a>
-        <a href="?tab=favorit" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'favorit' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'favorit' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Menu Favorit</a>
+        <a href="index.php?controller=pelanggan&action=profil&tab=riwayat" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'riwayat' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'riwayat' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Riwayat Pesanan</a>
+        <a href="index.php?controller=pelanggan&action=profil&tab=voucher" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'voucher' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'voucher' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Voucher Saya</a>
+        <a href="index.php?controller=pelanggan&action=profil&tab=favorit" style="padding-bottom: 10px; text-decoration: none; color: <?= $tab == 'favorit' ? '#6F4E37' : '#888' ?>; border-bottom: 3px solid <?= $tab == 'favorit' ? '#6F4E37' : 'transparent' ?>; font-weight: bold;">Menu Favorit</a>
     </div>
 
     <div style="background: white; padding: 20px; border-radius: 15px;">
@@ -68,10 +60,10 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
 
             <?php
             // Ambil data riwayat pesanan khusus untuk member ini
-            $query = "SELECT * FROM tb_pesanan WHERE id_member = ? ORDER BY tgl_pesanan DESC";
-            $stmt_r = $conn->prepare($query);
-            $stmt_r->execute([$id_m]);
-            $riwayat = $stmt_r->fetchAll();
+            // $query = "SELECT * FROM tb_pesanan WHERE id_member = ? ORDER BY tgl_pesanan DESC";
+            // $stmt_r = $conn->prepare($query);
+            // $stmt_r->execute([$id_m]);
+            // $riwayat = $stmt_r->fetchAll();
 
             if (empty($riwayat)) : ?>
                 <p style="color: #999; text-align: center; padding: 20px;">Belum ada riwayat pesanan.</p>
@@ -141,7 +133,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
                     <p style="color: #999; text-align: center; padding: 20px;">Belum ada voucher tersedia saat ini.</p>
                     <?php else :
                     foreach ($promos as $p):
-                        $bisa_tukar = ($user['total_poin'] >= $p['poin_dibutuhkan']);
+                        $bisa_tukar = ($user['total_poin'] >= $p['min_poin']);
                     ?>
                         <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; padding: 20px; border-radius: 15px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
                             <div style="display: flex; gap: 20px; align-items: center;">
@@ -150,8 +142,8 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
                                 </div>
                                 <div>
                                     <strong style="font-size: 16px; color: #333;"><?= $p['nama_promo'] ?></strong><br>
-                                    <span style="color: #28a745; font-weight: bold; font-size: 14px;">Potongan Rp <?= number_format($p['nominal_potongan']) ?></span><br>
-                                    <small style="color: #bbb;">Syarat: <?= $p['poin_dibutuhkan'] ?> Poin</small>
+                                    <span style="color: #28a745; font-weight: bold; font-size: 14px;">Potongan Rp <?= number_format($p['potongan']) ?></span><br>
+                                    <small style="color: #bbb;">Syarat: <?= $p['min_poin'] ?> Poin</small>
                                 </div>
                             </div>
 
@@ -196,7 +188,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
                     <?php else :
                     foreach ($favorit as $f): ?>
                         <div style="background: white; border: 1px solid #f0f0f0; border-radius: 15px; padding: 15px; text-align: center; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-                            <img src="../assets/gambar/menu/<?= $f['foto'] ?: 'default.jpg' ?>" width="100%" height="120" style="border-radius: 10px; object-fit: cover; margin-bottom: 10px;">
+                            <img src="assets/gambar/menu/<?= $f['foto'] ?: 'default.jpg' ?>" width="100%" height="120" style="border-radius: 10px; object-fit: cover; margin-bottom: 10px;">
                             <h5 style="margin: 5px 0; font-size: 15px;"><?= $f['nama_menu'] ?></h5>
                             <p style="color: #6F4E37; font-weight: bold; margin: 5px 0; font-size: 14px;">Rp <?= number_format($f['harga']) ?></p>
                             <small style="color: #888; display: block; margin-bottom: 10px;">Dipesan <?= $f['total_dipesan'] ?>x</small>
@@ -214,5 +206,3 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
         <?php endif; ?>
     </div>
 </div>
-
-<?php include '../layout/footer.php'; ?>
