@@ -137,7 +137,7 @@
     z-index: 2;
 }
 
-.badge-status {
+.badge-order-status {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -550,7 +550,7 @@
 }
 
 /* Bagian Badge */
-.badge-status-detail {
+.badge-order-status-detail {
     padding: 6px 15px;
     border-radius: 30px;
     font-size: 13px;
@@ -955,7 +955,7 @@
         padding: 2px 6px;
     }
 
-    .badge-status {
+    .badge-order-status {
         top: auto;
         bottom: 5px; /* Pindahkan status ke bawah gambar agar tidak tumpuk */
         right: 5px;

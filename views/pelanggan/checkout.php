@@ -19,7 +19,7 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
 ?>
 
 <div class="page-container">
-    <h1 class="page-title" style="text-align: left; margin-bottom: 30px;">Checkout Pesanan</h1>
+    <h1 class="co-page-title">Checkout Pesanan</h1>
 
     <form action="index.php?controller=checkout&action=simpanPesanan" method="POST" id="formCheckout">
         <div class="checkout-wrapper">
@@ -30,7 +30,7 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                     <h3 class="co-section-title"><i class="fa-regular fa-address-card"></i> Informasi Pemesan</h3>
                     <div class="co-user-info">
                         <strong><?= htmlspecialchars($nama_pelanggan) ?></strong>
-                        <i class="fa-solid fa-phone" style="font-size: 12px; margin-right: 5px;"></i> <?= htmlspecialchars($telp_pelanggan) ?>
+                        <i class="fa-solid fa-phone"></i> <?= htmlspecialchars($telp_pelanggan) ?>
                     </div>
                 </div>
 
@@ -149,12 +149,16 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                 <div class="co-section">
                     <h3 class="co-section-title"><i class="fa-solid fa-ticket"></i> Voucher / Promo</h3>
 
-                    <div class="co-voucher-box" style="display: flex; gap: 8px;">
-                        <input type="text" id="kode_promo" class="co-voucher-input" style="flex: 1;" placeholder="Masukkan kode promo...">
-                        <input type="hidden" name="id_promo" id="id_promo_input" value="">
+                    <div class="co-voucher-container">
+                        <div class="co-voucher-input-wrapper">
+                            <input type="text" id="kode_promo" class="co-voucher-input" placeholder="Masukkan kode promo...">
+                            <input type="hidden" name="id_promo" id="id_promo_input" value="">
+                        </div>
 
-                        <button type="button" class="btn-voucher-action" style="background:#6F4E37; color:white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;" onclick="pakaiPromoManual()">Pakai</button>
-                        <button type="button" class="btn-voucher-action" style="background:#f5f5f5; color:#333; border: 1px solid #ddd; padding: 10px 15px; border-radius: 8px; cursor: pointer;" onclick="bukaModalVoucher()">Lihat Pilihan Promo</button>
+                        <div class="btn-voucher-group">
+                            <button type="button" class="btn-voucher-pakai" onclick="pakaiPromoManual()">Pakai</button>
+                            <button type="button" class="btn-voucher-lihat" onclick="bukaModalVoucher()">Lihat Pilihan Promo</button>
+                        </div>
                     </div>
                     <div id="info_promo_diklaim" style="display: none; margin-top: 15px; padding: 12px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; color: #2e7d32;">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -172,7 +176,7 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                 </div>
 
                 <div class="co-section">
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; color: #333;">
+                    <label class="co-label-catatan">
                         <input type="checkbox" id="check_catatan" onchange="toggleCatatan()" style="width: 18px; height: 18px;">
                         Tambahan Catatan (Opsional)
                     </label>
@@ -181,13 +185,12 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                     </div>
                 </div>
 
-                <a href="index.php?controller=keranjang&action=index" class="btn-back" style="margin-top: 10px; display: inline-flex;">
-                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Keranjang
-                </a>
             </div>
 
+
+
             <div class="checkout-sidebar">
-                <h3 class="co-section-title" style="border-bottom: none; padding-bottom: 0;"><i class="fa-solid fa-receipt"></i> Rincian Pembayaran</h3>
+                <h3 class="co-section-title"><i class="fa-solid fa-receipt"></i> Rincian Pembayaran</h3>
 
                 <div class="summary-line">
                     <span>Subtotal Menu</span>
@@ -206,12 +209,12 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                     <span>Free Produk</span>
                     <span id="nama_free_produk"></span>
                 </div>
-                <div class="summary-line" id="baris_diskon" style="display: none; color: #e74c3c; font-weight: bold; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                <div class="summary-line" id="baris_diskon" style="display: none; color: var(--danger, #e74c3c); font-weight: bold; flex-direction: column;">
+                    <div class="co-summary-flex">
                         <span id="label_diskon">Potongan</span>
                         <span id="nilai_diskon">- Rp 0</span>
                     </div>
-                    <div id="info_gratis_produk" style="display: none; font-size: 12px; color: #2e7d32; margin-top: 4px; text-align: right;">
+                    <div id="info_gratis_produk" class="co-free-product-info">
                         <i class="fa-solid fa-gift"></i> Gratis: <span id="nama_produk_free"></span>
                     </div>
                 </div>
@@ -222,12 +225,20 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                 </div>
 
                 <button type="submit" class="btn-bayar">Buat Pesanan Sekarang</button>
+
             </div>
+
+        </div>
+        <div class="co-action-group">
+            <a href="index.php?controller=keranjang&action=index" class="btn-co-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Keranjang
+            </a>
+
         </div>
     </form>
 </div>
 
-<div id="modalVoucher" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+<div id="modalVoucher">
     <div style="background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 450px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">

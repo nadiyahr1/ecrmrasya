@@ -626,6 +626,7 @@ class CheckoutController
             exit;
         }
 
+        require_once 'layout/header.php';
         require_once __DIR__ . '/../views/pelanggan/pembayaran.php';
     }
 
