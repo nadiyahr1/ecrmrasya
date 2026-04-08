@@ -1,0 +1,721 @@
+/* =========================================
+   1. HALAMAN KERANJANG BELANJA (GLOBAL & DESKTOP)
+   ========================================= */
+.cart-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.cart-title {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* ================= Empty State ================= */
+.empty-cart {
+    padding: 80px 20px;
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+}
+
+.empty-cart i { font-size: 60px; color: #ddd; margin-bottom: 20px; }
+.empty-cart h2 { color: #6F4E37; margin-bottom: 10px; }
+.empty-cart p { color: #888; margin-bottom: 30px; }
+
+.empty-cart-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* ================= Tabel Keranjang Desktop ================= */
+.cart-table-wrapper {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.cart-table th {
+    background: #fdfaf8;
+    color: #6F4E37;
+    padding: 15px;
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+}
+
+.cart-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.cart-table tr:last-child td { 
+    border-bottom: none; 
+}
+.fasilitas-row { 
+    background-color: #fcfcfc; 
+}
+
+/* Wrapper Info Item (Desktop: Sampingan) */
+.cart-item-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f5f5f5;
+    flex-shrink: 0;
+}
+
+.cart-item-details strong {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* HARGA MOBILE DISEMBUNYIKAN DI DESKTOP */
+.item-price-mobile {
+    display: none; 
+}
+
+.qty-input {
+    width: 70px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 15px;
+}
+
+.qty-input:focus {
+    outline: none;
+    border-color: #6F4E37;
+}
+
+.btn-delete {
+    color: #e74c3c;
+    background: #fdf2f2;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/* ================= Footer Keranjang ================= */
+.cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.btn-back-cart {
+    color: #6F4E37;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-back-cart:hover { transform: translateX(-5px); }
+
+.btn-checkout {
+    background: #6F4E37;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn-checkout:hover { 
+    background: white; 
+    color: #5a3d2b;
+    border: 2px solid #6F4E37;
+}
+
+.btn-outline-cart {
+    background: #6F4E37;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-outline-cart:hover {
+    background: white; 
+    color: #5a3d2b;
+    border: 2px solid #6F4E37;
+}
+
+/* 3. HALAMAN CHECKOUT */
+/* =========================================
+   3. HALAMAN CHECKOUT (DESAIN BARU)
+   ========================================= */
+.checkout-wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.checkout-main {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checkout-sidebar {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 100px;
+}
+
+.co-section {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.co-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* --- Informasi Pemesan --- */
+.co-user-info {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+}
+.co-user-info strong {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* --- Detail Pesanan List --- */
+.co-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.co-item-card {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+}
+.co-item-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.co-item-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f5f5f5;
+}
+
+.co-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.co-item-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 15px;
+}
+
+.co-item-price-qty {
+    font-size: 14px;
+    color: #888;
+}
+
+.co-item-subtotal {
+    font-weight: bold;
+    color: #6F4E37;
+    text-align: right;
+    font-size: 15px;
+}
+
+/* --- Radio Box Cards (Tipe Pesanan & Pembayaran) --- */
+.co-radio-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.co-radio-card {
+    flex: 1;
+    min-width: 150px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    position: relative;
+}
+
+.co-radio-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.co-radio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.co-radio-content i {
+    font-size: 24px;
+    color: #888;
+    transition: 0.3s;
+}
+
+/* Efek saat dipilih */
+.co-radio-card input[type="radio"]:checked + .co-radio-content {
+    color: #6F4E37;
+}
+.co-radio-card input[type="radio"]:checked + .co-radio-content i {
+    color: #6F4E37;
+}
+.co-radio-card:has(input[type="radio"]:checked) {
+    border-color: #6F4E37;
+    background: #fdfaf8;
+    box-shadow: 0 0 0 1px #6F4E37;
+}
+
+/* --- Form Input Standar --- */
+.co-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    margin-top: 15px;
+}
+.co-input:focus {
+    outline: none;
+    border-color: #6F4E37;
+}
+
+/* --- Area Voucher --- */
+.co-voucher-box {
+    display: flex;
+    gap: 10px;
+}
+.co-voucher-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.btn-voucher-action {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.co-points-info {
+    font-size: 13px;
+    color: #27ae60;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- Rincian Pembayaran Sidebar --- */
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #555;
+}
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ccc;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+.btn-bayar {
+    width: 100%;
+    background: #6F4E37;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-bayar:hover {
+    background: #5a3d2b;
+}
+
+
+/* =========================================
+   MEDIA QUERY MOBILE
+   ========================================= */
+@media screen and (max-width: 768px) {
+    .cart-container {
+        padding: 10px;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .cart-title { font-size: 20px; border: none; }
+    .cart-table-wrapper {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible; /* Pastikan bayangan kotak tidak terpotong */
+        border: none;
+    }
+    .cart-table { min-width: unset; }
+    .cart-table thead { display: none; }
+
+    .cart-table, .cart-table tbody, .cart-table tr, .cart-table td {
+        display: block;
+        width: 100%;
+        position: relative;
+    }
+
+    /* KARTU ITEM */
+    .cart-table tbody tr {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: none;
+    }
+
+    /* 1. Baris Checkbox (Atas Kiri) */
+    .col-check {
+        border: none !important;
+        padding: 0 0 10px 0 !important;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #f5f5f5 !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Ini kunci agar checkbox di kiri & hapus di kanan */
+        width: 100%;
+        text-align: left !important;
+    }
+    .col-check::before {
+        content: "Pilih Item";
+        font-weight: bold;
+        font-size: 13px;
+        color: #555;
+    }
+
+    /* 2. Tombol Hapus (Atas Kanan Absolut) */
+    .col-action {
+        position: static !important; /* Menghapus posisi melayang */
+        width: auto !important;
+        padding: 0 !important;
+        border: none !important;
+        display: inline-block;
+    }
+
+    .btn-delete {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        background: #fff0f0; /* Warna background soft merah */
+        color: #e74c3c;
+        border-radius: 8px;
+    }
+
+    /* 3. Info Item (Gambar & Teks) */
+    .col-item {
+        border: none !important;
+        padding: 0 !important;
+    }
+    .cart-item-card {
+        align-items: flex-start; /* Gambar di atas, sejajar teks */
+        gap: 15px;
+    }
+    .item-img {
+        width: 80px;
+        height: 80px;
+    }
+    .cart-item-details strong {
+        font-size: 15px;
+        line-height: 1.3;
+    }
+    
+    /* Harga Muncul Khusus Mobile */
+    .item-price-mobile {
+        display: block; 
+        font-size: 15px;
+        color: #6F4E37;
+        font-weight: bold;
+        margin-top: 6px;
+    }
+
+    /* 4. Sembunyikan Harga Desktop */
+    .col-price { display: none !important; }
+
+    /* 5. Baris Jumlah / Qty */
+    .col-qty {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center;
+        border: none !important;
+        padding: 15px 0 0 0 !important;
+        margin-top: 15px;
+        border-top: 1px dashed #eee !important;
+    }
+    .col-qty::before {
+        content: "Jumlah :";
+        font-size: 13px;
+        color: #888;
+    }
+    .qty-input { width: 60px; padding: 5px; height: 32px; }
+
+    /* 6. Baris Subtotal */
+    .col-subtotal {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center;
+        border: none !important;
+        padding: 8px 0 0 0 !important;
+        font-size: 16px !important;
+    }
+    .col-subtotal::before {
+        content: "Subtotal :";
+        font-size: 13px;
+        color: #888;
+    }
+
+    /* 7. Footer Total Bayar */
+    .cart-table tfoot {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .cart-table tfoot tr {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        padding: 15px; /* Disamakan dengan kotak item di atasnya */
+        width: 100% !important; 
+        box-sizing: border-box; 
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .cart-table tfoot td:first-child { display: none; } 
+    .cart-table tfoot td:last-child { display: none; } 
+    
+    .cart-table tfoot td#total_bayar_display {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center;
+        width: 100%;
+        border: none !important;
+        padding: 0 !important;
+    }
+    .cart-table tfoot td#total_bayar_display::before {
+        content: "Total Bayar:";
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* 8. Tombol Navigasi Bawah */
+    .cart-footer {
+        display: flex;
+        flex-direction: row; /* Berjejer ke samping */
+        justify-content: space-between;
+        gap: 10px; /* Jarak tengah antar tombol */
+        margin-top: 20px;
+    }
+    
+    .btn-back-cart, .btn-checkout {
+        flex: 1; /* Membagi ukuran tombol persis 50:50 */
+        justify-content: center;
+        padding: 12px 5px; /* Mengurangi padding samping agar muat di HP kecil */
+        font-size: 13px; /* Sedikit dikecilkan agar teks tidak terpotong */
+        text-align: center;
+    }
+
+    /* MOBILE CHECKOUT */
+    .checkout-wrapper {
+        flex-direction: column;
+        padding: 10px 0;
+        gap: 20px;
+    }
+
+    .checkout-sidebar {
+        position: static;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .checkout-left, .checkout-right {
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .checkout-right {
+        position: static; /* Hilangkan efek sticky di HP */
+    }
+
+    .section-content {
+        margin-left: 0;
+    }
+
+    .voucher-area {
+        flex-direction: column;
+    }
+
+    .btn-voucher {
+        padding: 14px;
+        width: 100%;
+    }
+
+    /* --- Tabel Checkout Mode Mobile (Teknik attr data-label) --- */
+    .checkout-table thead {
+        display: none; /* Sembunyikan header asli */
+    }
+
+    .checkout-table, .checkout-table tbody, .checkout-table tr, .checkout-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .checkout-table-wrapper { border: none; }
+
+    .checkout-table tr {
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: #fafafa;
+    }
+
+    .checkout-table td {
+        text-align: right !important;
+        padding: 8px 0 !important;
+        border: none !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    /* Memunculkan Label dari atribut data-label di HTML */
+    .checkout-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #888;
+        text-align: left;
+    }
+
+    /* Format khusus Nama Item di Mobile */
+    .checkout-table td.co-item-name {
+        font-weight: bold;
+        color: #333;
+        font-size: 15px;
+        justify-content: flex-start;
+        gap: 10px;
+        border-bottom: 1px solid #eaeaea !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 10px;
+    }
+    .checkout-table td.co-item-name::before { display: none; }
+}

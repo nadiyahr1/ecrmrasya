@@ -5,7 +5,6 @@ class CheckoutModel
 {
 
     private $conn;
-
     public function __construct()
     {
         global $conn;
@@ -16,7 +15,7 @@ class CheckoutModel
     public function getMember($id_member)
     {
         $stmt = $this->conn->prepare("
-            SELECT m.*, l.diskon, l.nama_level 
+            SELECT m.*, l.nama_level 
             FROM tb_member m
             JOIN tb_level_member l ON m.id_level = l.id_level
             WHERE m.id_member = ?
@@ -50,10 +49,19 @@ class CheckoutModel
     // INSERT PESANAN
     public function insertPesanan($data)
     {
+        // $data[7] adalah data 'metode_pembayaran' dari Controller
+        $metode_bayar = $data[7];
+
+        // Logika Dinamis: Jika Transfer = Belum Bayar, Jika Kasir = Menunggu Konfirmasi
+        $status_awal = ($metode_bayar == 'Transfer') ? 'Belum Bayar' : 'Menunggu Konfirmasi';
+
+        // Masukkan status awal tersebut ke dalam array data sebagai parameter ke-10
+        $data[] = $status_awal;
+
         $stmt = $this->conn->prepare("
             INSERT INTO tb_pesanan 
             (id_pesanan, id_member, id_meja, id_promo, tgl_pesanan, total_transaksi, tipe_pemesanan, metode_pembayaran, catatan, status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Menunggu Konfirmasi')
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         return $stmt->execute($data);
     }
@@ -78,8 +86,8 @@ class CheckoutModel
     {
         return $this->conn->prepare("
             INSERT INTO tb_booking_fasilitas 
-            (id_pesanan, id_fasilitas, tgl_sewa, jam_mulai, durasi_jam, jumlah_orang, subtotal_sewa) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (id_pesanan, id_fasilitas, tgl_sewa, jam_mulai, jam_selesai, durasi_jam, jumlah_orang, subtotal_sewa) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ")->execute($data);
     }
 
@@ -88,17 +96,12 @@ class CheckoutModel
         $this->conn->prepare("
             UPDATE tb_member SET poin = poin + ? WHERE id_member = ?
         ")->execute([$poin, $id_member]);
-
-        $this->conn->prepare("
-            INSERT INTO tb_history_poin (id_member, poin, keterangan, tgl_perubahan)
-            VALUES (?, ?, 'Transaksi', NOW())
-        ")->execute([$id_member, $poin]);
     }
 
     public function updateMeja($id_meja)
     {
         return $this->conn->prepare("
-            UPDATE tb_meja SET status='Dipakai' WHERE id_meja=?
+            UPDATE tb_meja SET status='Terisi' WHERE id_meja=?
         ")->execute([$id_meja]);
     }
 

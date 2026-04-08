@@ -36,8 +36,16 @@ class AuthController
             $_SESSION['nama']    = $user['nama_user'];
             $_SESSION['role']    = $user['role'];
 
-            header("Location: index.php?controller=home&action=index");
-            exit;
+            if ($_SESSION['role'] === 'Admin') {
+                header("Location: index.php?controller=admin&action=index");
+                exit;
+            } elseif ($_SESSION['role'] === 'Owner') {
+                header("Location: index.php?controller=owner&action=index");
+                exit;
+            } else {
+                header("Location: index.php?controller=home&action=index");
+                exit;
+            }
         }
 
         // CEK MEMBER
@@ -47,8 +55,8 @@ class AuthController
 
         if ($member && password_verify($pass_input, $member['password'])) {
 
-            if ($member['status_akun'] == 'Nonaktif') {
-                echo "<script>alert('Akun belum aktif'); window.location='index.php?controller=auth&action=login';</script>";
+            if ($member['status_akun'] == 'Pending') {
+                echo "<script>alert('Akun Anda sedang menunggu verifikasi oleh Admin. Silakan coba beberapa saat lagi.'); window.location='index.php?controller=auth&action=login';</script>";
                 exit;
             }
 
@@ -96,22 +104,58 @@ class AuthController
         $no_telp  = $_POST['no_telp'];
 
         try {
+            // 1. CEK DUPLIKAT NOMOR TELEPON (Tambahan Proteksi)
+            $stmt_cek = $this->conn->prepare("SELECT id_member FROM tb_member WHERE no_telp = ?");
+            $stmt_cek->execute([$no_telp]);
+            if ($stmt_cek->rowCount() > 0) {
+                echo "<script>alert('Nomor telepon sudah terdaftar! Gunakan nomor lain.'); window.history.back();</script>";
+                exit;
+            }
 
             $sql = "INSERT INTO tb_member 
-                    (id_level, poin, nama_member, username, password, no_telp, total_poin, status_akun) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                (id_level, poin, jml_transaksi, total_belanja, nama_member, username, password, no_telp, status_akun) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([1, 0, $nama, $username, $password, $no_telp, 0, 'Aktif']);
+            // Menggunakan 'Pending' sesuai enum database Anda
+            $stmt->execute([1, 10, 0, 0, $nama, $username, $password, $no_telp, 'Pending']);
 
-            echo "<script>alert('Registrasi berhasil!'); window.location='index.php?controller=auth&action=login';</script>";
+            // Pesan notifikasi yang lebih informatif
+            echo "<script>alert('Registrasi berhasil! Akun Anda sedang menunggu verifikasi oleh Admin. Silakan cek secara berkala.'); window.location='index.php?controller=auth&action=login';</script>";
         } catch (PDOException $e) {
-
+            // 2. CEK DUPLIKAT USERNAME (Melalui Error Code Database)
             if ($e->getCode() == 23000) {
-                echo "<script>alert('Username sudah digunakan!'); window.history.back();</script>";
+                echo "<script>alert('Username sudah digunakan! Silakan pilih username lain.'); window.history.back();</script>";
             } else {
                 echo "Error: " . $e->getMessage();
             }
         }
+    }
+
+    public function cekKetersediaan()
+    {
+        header('Content-Type: application/json');
+
+        $field = $_POST['field'] ?? ''; // 'username' atau 'no_telp'
+        $value = $_POST['value'] ?? '';
+
+        if (empty($field) || empty($value)) {
+            echo json_encode(['exists' => false]);
+            exit;
+        }
+
+        // Tentukan tabel dan kolom berdasarkan field
+        $column = ($field === 'username') ? 'username' : 'no_telp';
+        $label = ($field === 'username') ? 'Username' : 'Nomor Telepon';
+
+        $stmt = $this->conn->prepare("SELECT id_member FROM tb_member WHERE $column = ?");
+        $stmt->execute([$value]);
+
+        if ($stmt->rowCount() > 0) {
+            echo json_encode(['exists' => true, 'message' => $label . ' sudah digunakan!']);
+        } else {
+            echo json_encode(['exists' => false]);
+        }
+        exit;
     }
 }

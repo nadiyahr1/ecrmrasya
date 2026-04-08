@@ -1,7 +1,34 @@
 <?php
-
 // Logika Tab
 $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
+
+// KODE BARU: Logika Progress Bar berdasarkan Jumlah Transaksi
+$id_level_sekarang = $user['id_level'];
+$stmt_next = $conn->prepare("SELECT * FROM tb_level_member WHERE id_level > ? ORDER BY id_level ASC LIMIT 1");
+$stmt_next->execute([$id_level_sekarang]);
+$next_level = $stmt_next->fetch();
+
+if ($next_level) {
+    $target_trx = $next_level['min_transaksi'];
+    $target_rp  = $next_level['min_belanja'];
+
+    $current_trx = $user['jml_transaksi'];
+    $current_rp  = $user['total_belanja'];
+
+    // Hitung sisa untuk mencapai target
+    $sisa_trx = ($target_trx > $current_trx) ? ($target_trx - $current_trx) : 0;
+    $sisa_rp  = ($target_rp > $current_rp) ? ($target_rp - $current_rp) : 0;
+
+    // Hitung persentase untuk progress bar (ambil yang tertinggi)
+    $prog_trx = ($target_trx > 0) ? ($current_trx / $target_trx) * 100 : 0;
+    $prog_rp  = ($target_rp > 0) ? ($current_rp / $target_rp) * 100 : 0;
+    $progress = max($prog_trx, $prog_rp);
+
+    $teks_progress = "Butuh <strong>$sisa_trx Transaksi lagi</strong> atau <strong>Rp " . number_format($sisa_rp, 0, ',', '.') . " transaksi lagi</strong> untuk naik ke Level {$next_level['nama_level']}";
+} else {
+    $progress = 100;
+    $teks_progress = "Selamat! Anda telah mencapai level tertinggi (Gold).";
+}
 ?>
 
 <div style="max-width: 900px; margin: 30px auto; padding: 65px 20px;">
@@ -10,28 +37,44 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
             <div>
                 <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;"><?= $user['nama_level'] ?> MEMBER</p>
                 <h2 style="margin: 10px 0; font-size: 32px;"><?= $user['nama_member'] ?></h2>
-                <h1 style="margin: 0; font-size: 40px; font-weight: bold;"><?= number_format($user['total_poin']) ?> <span style="font-size: 18px;">Poin</span></h1>
+                <h1 style="margin: 0; font-size: 40px; font-weight: bold;">
+                    <?= number_format($user['poin']) ?>
+                    <span style="font-size: 18px;">Poin Tersedia</span>
+                </h1>
+                <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">
+                    Riwayat: <strong><?= number_format($user['jml_transaksi']) ?>x</strong> Transaksi | Total: <strong>Rp <?= number_format($user['total_belanja'], 0, ',', '.') ?></strong>
+                </p>
             </div>
             <div style="text-align: right;">
-                <!-- <p style="margin: 0; font-size: 12px; opacity: 0.8;"><?= $user['email'] ?? 'Member@rasya.co' ?></p> -->
                 <p style="margin: 0; font-size: 12px; opacity: 0.8;"><?= $user['no_telp'] ?></p>
             </div>
         </div>
 
         <div style="margin-top: 25px;">
             <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 10px;">
-                <div style="background: white; width: <?= min(($user['total_poin'] / 1000) * 100, 100) ?>%; height: 100%; border-radius: 10px;"></div>
+                <div style="background: white; width: <?= min($progress, 100) ?>%; height: 100%; border-radius: 10px;"></div>
             </div>
-            <p style="font-size: 12px; margin-top: 8px;">Poin dibutuhkan untuk level selanjutnya: 1,000 Poin</p>
+            <p style="font-size: 12px; margin-top: 8px;"><?= $teks_progress ?></p>
         </div>
-        <a href="edit_profil.php" style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.2); color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-size: 14px;">EDIT PROFIL</a>
+
+        <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px;">
+            <a href="index.php?controller=checkout&action=riwayat_poin"
+                style="background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 30px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.5);">
+                <i class="fa-solid fa-clock-rotate-left"></i> RIWAYAT POIN
+            </a>
+            <a href="index.php?controller=pelanggan&action=edit_profil"
+                style="background: rgba(0,0,0,0.2); color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-size: 14px;">
+                EDIT PROFIL
+            </a>
+        </div>
     </div>
-    <div style="margin-top: 20px; text-align: center;">
+
+    <!-- <div style="margin-top: 20px; text-align: center;">
         <button onclick="document.getElementById('modalKlaim').style.display='block'"
             style="padding: 10px 20px; background: #333; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: bold;">
             ✨ Klaim Poin dari Struk
         </button>
-    </div>
+    </div> -->
 
     <div id="modalKlaim" style="display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);">
         <div style="background: white; margin: 15% auto; padding: 25px; width: 350px; border-radius: 15px; text-align: center;">
@@ -55,110 +98,77 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
     </div>
 
     <div style="background: white; padding: 20px; border-radius: 15px;">
+
         <?php if ($tab == 'riwayat'): ?>
-            <h4 style="margin-top: 0; color: #6F4E37;">Daftar Pesanan Terakhir</h4>
+            <?php include 'views/pelanggan/riwayat_pesanan.php'; ?>
 
-            <?php
-            // Ambil data riwayat pesanan khusus untuk member ini
-            // $query = "SELECT * FROM tb_pesanan WHERE id_member = ? ORDER BY tgl_pesanan DESC";
-            // $stmt_r = $conn->prepare($query);
-            // $stmt_r->execute([$id_m]);
-            // $riwayat = $stmt_r->fetchAll();
-
-            if (empty($riwayat)) : ?>
-                <p style="color: #999; text-align: center; padding: 20px;">Belum ada riwayat pesanan.</p>
-            <?php else : ?>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <?php foreach ($riwayat as $r) : ?>
-                        <div style="border: 1px solid #eee; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <small style="color: #888;"><?= date('d M Y', strtotime($r['tgl_pesanan'])) ?></small>
-                                <div style="font-weight: bold; margin: 3px 0;"><?= $r['id_pesanan'] ?></div>
-                                <span style="font-size: 12px; padding: 2px 8px; border-radius: 10px; color: white; background: 
-                            <?php
-                            if ($r['status'] == 'Menunggu Verifikasi') echo '#ffc107';
-                            elseif ($r['status'] == 'Diproses' || $r['status'] == 'Dapat Diambil') echo '#17a2b8';
-                            elseif ($r['status'] == 'Selesai') echo '#28a745';
-                            else echo '#dc3545';
-                            ?>;">
-                                    <?= $r['status'] ?>
-                                </span>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-weight: bold; color: #6F4E37;">Rp <?= number_format($r['total_transaksi']) ?></div>
-
-                                <?php if ($r['status'] == 'Selesai'): ?>
-                                    <?php
-                                    // Cek dan ambil data ulasan (Komentar & Balasan) untuk ID Pesanan ini
-                                    $cek_u = $conn->prepare("SELECT komentar, balasan_admin FROM tb_ulasan WHERE id_pesanan = ?");
-                                    $cek_u->execute([$r['id_pesanan']]);
-                                    $data_ulasan = $cek_u->fetch();
-
-                                    if (!$data_ulasan):
-                                    ?>
-                                        <a href="form_ulasan.php?id=<?= $r['id_pesanan'] ?>" style="display:inline-block; margin-top:5px; font-size: 12px; background: #ffc107; color: #333; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">Beri Ulasan</a>
-                                    <?php else: ?>
-                                        <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #eee;">
-                                            <div style="font-size: 12px; color: #444;">
-                                                <strong style="color: #6F4E37;">Ulasan Kamu:</strong><br>
-                                                <?= nl2br(htmlspecialchars($data_ulasan['komentar'])) ?>
-                                            </div>
-
-                                            <?php if (!empty($data_ulasan['balasan_admin'])): ?>
-                                                <div style="font-size: 12px; color: #0369a1; margin-top: 10px; background: #e0f2fe; padding: 10px; border-radius: 6px; border-left: 3px solid #0284c7;">
-                                                    <strong>Balasan Rasya.co:</strong><br>
-                                                    <?= nl2br(htmlspecialchars($data_ulasan['balasan_admin'])) ?>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-
-                                <a href="../detail_pesanan_pelanggan.php?id=<?= $r['id_pesanan'] ?>" style="display:block; font-size: 12px; color: #6F4E37; text-decoration: none; margin-top:5px;">Lihat Detail →</a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
         <?php elseif ($tab == 'voucher'): ?>
-            <h4 style="margin-top: 0; color: #6F4E37;">Voucher & Hadiah Saya</h4>
-            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Tukarkan poin Anda atau gunakan voucher yang sudah tersedia untuk mendapatkan potongan harga.</p>
+            <h4 style="margin-top: 0; color: #6F4E37;">Voucher & Promo Saya</h4>
+            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Berikut adalah promo dan voucher khusus yang bisa Anda gunakan. Klik untuk melihat kode dan detailnya.</p>
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <?php
-                // Mengambil daftar voucher tipe 'Loyalty' dari database
-                $promos = $conn->query("SELECT * FROM tb_promo WHERE tipe_promo = 'Loyalty' ORDER BY potongan DESC")->fetchAll();
-
-                if (empty($promos)) : ?>
-                    <p style="color: #999; text-align: center; padding: 20px;">Belum ada voucher tersedia saat ini.</p>
+                // MENGGUNAKAN VARIABEL $vouchers DARI CONTROLLER, BUKAN QUERY NATIVE LAGI
+                if (empty($vouchers)) : ?>
+                    <div style="text-align: center; padding: 40px; border: 1px dashed #ddd; border-radius: 15px; background: #fafafa;">
+                        <p style="color: #999; margin:0;">Belum ada voucher atau promo yang tersedia saat ini.</p>
+                    </div>
                     <?php else :
-                    foreach ($promos as $p):
-                        $bisa_tukar = ($user['total_poin'] >= $p['min_poin']);
+                    foreach ($vouchers as $p):
+                        $sudah_dipakai = in_array($p['id_promo'], $used_vouchers); // CEK PEMAKAIAN
+                        // Logika Cek Poin (Hanya berlaku untuk tipe Tukar Poin)
+                        $is_tukar_poin = ($p['tipe_promo'] == 'Tukar_Poin');
+                        $bisa_tukar = $is_tukar_poin ? ($user['poin'] >= $p['min_poin']) : true;
+                        $disable_card = $sudah_dipakai || !$bisa_tukar;
                     ?>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; padding: 20px; border-radius: 15px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; padding: 20px; border-radius: 15px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.02); <?= !$bisa_tukar ? 'opacity: 0.5; filter: grayscale(100%);' : '' ?>">
+
                             <div style="display: flex; gap: 20px; align-items: center;">
-                                <div style="width: 50px; height: 50px; background: #fffcf5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    ☕
+                                <div style="width: 55px; height: 55px; background: #fffcf5; border: 1px solid #f9eed7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px;">
+                                    <?= $p['tipe_potongan'] == 'Produk' ? '🎁' : '🎫' ?>
                                 </div>
                                 <div>
-                                    <strong style="font-size: 16px; color: #333;"><?= $p['nama_promo'] ?></strong><br>
-                                    <span style="color: #28a745; font-weight: bold; font-size: 14px;">Potongan Rp <?= number_format($p['potongan']) ?></span><br>
-                                    <small style="color: #bbb;">Syarat: <?= $p['min_poin'] ?> Poin</small>
+                                    <strong style="font-size: 16px; color: #333;"><?= htmlspecialchars($p['nama_promo']) ?></strong><br>
+
+                                    <?php if ($p['tipe_potongan'] == 'Produk'): ?>
+                                        <span style="color: #e67e22; font-weight: bold; font-size: 14px;">Gratis Item Terpilih</span>
+                                    <?php elseif ($p['tipe_potongan'] == 'Persen'): ?>
+                                        <span style="color: #28a745; font-weight: bold; font-size: 14px;">Diskon <?= $p['potongan'] ?>%</span>
+                                    <?php else: ?>
+                                        <span style="color: #28a745; font-weight: bold; font-size: 14px;">Potongan Rp <?= number_format($p['potongan']) ?></span>
+                                    <?php endif; ?><br>
+
+                                    <small style="color: #888; display: inline-block; margin-top: 5px;">
+                                        <span style="background: #eee; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; color: #555;">
+                                            Promo <?= str_replace('_', ' ', $p['tipe_promo']) ?>
+                                        </span>
+                                        <?php if ($is_tukar_poin) echo " &nbsp;&bull;&nbsp; Harga: <strong>" . number_format($p['min_poin']) . " Poin</strong>"; ?>
+                                    </small>
                                 </div>
                             </div>
 
-                            <?php if ($bisa_tukar): ?>
-                                <a href="../menu.php" style="background: #6F4E37; color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold;">
-                                    Gunakan
-                                </a>
-                            <?php else: ?>
-                                <button disabled style="background: #eee; color: #aaa; border: none; padding: 10px 20px; border-radius: 30px; font-size: 12px;">
-                                    Poin Kurang
-                                </button>
-                            <?php endif; ?>
+                            <div style="text-align: right;">
+                                <?php if ($sudah_dipakai): ?>
+                                    <button disabled style="background: #e5e7eb; color: #6b7280; border: none; padding: 10px 20px; border-radius: 30px; font-size: 12px; font-weight:bold;">
+                                        Sudah Digunakan <i class="fa-solid fa-check"></i>
+                                    </button>
+                                <?php elseif ($bisa_tukar): ?>
+                                    <a href="index.php?controller=promo&action=detailPromo&id=<?= $p['id_promo'] ?>"
+                                        style="background: #6F4E37; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block; transition: 0.3s;">
+                                        Lihat & Klaim
+                                    </a>
+                                <?php else: ?>
+                                    <button disabled style="background: #eee; color: #aaa; border: none; padding: 10px 20px; border-radius: 30px; font-size: 12px; font-weight:bold;">
+                                        Poin Kurang
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+
                         </div>
-                <?php endforeach;
-                endif; ?>
+                <?php
+                    endforeach;
+                endif;
+                ?>
             </div>
 
         <?php elseif ($tab == 'favorit'): ?>
@@ -167,7 +177,8 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'riwayat';
 
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
                 <?php
-                // Logika Senior Developer: Menghitung menu yang paling sering dibeli oleh member ini
+                //Menghitung menu yang paling sering dibeli oleh member
+                $id_m = $_SESSION['id_member'];
                 $query_fav = "SELECT m.id_menu, m.nama_menu, m.harga, m.foto, COUNT(d.id_menu) as total_dipesan 
                       FROM tb_detail_pesanan d 
                       JOIN tb_pesanan p ON d.id_pesanan = p.id_pesanan 

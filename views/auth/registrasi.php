@@ -1,29 +1,69 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <title>Registrasi Member - Rasya.co</title>
-    <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f4; margin:0; }
-        .regis-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); width: 350px; }
-        input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #0275d8; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daftar Member - Rasya.co</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="regis-container">
-    <h2>Daftar Member Baru</h2>
-    <form action="index.php?controller=auth&action=prosesRegister" method="POST">
-        <input type="hidden" name="action" value="register">
-        <input type="text" name="nama" placeholder="Nama Lengkap" required>
-        <input type="text" name="username" placeholder="Username untuk Login" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="text" name="no_telp" placeholder="Nomor Telepon/WA" required>
-        <button type="submit">Daftar Sekarang</button>
-    </form>
-    <p style="text-align:center;"><a href="index.php?controller=auth&action=login">Sudah punya akun? Login</a></p>
-</div>
+    <div class="auth-page">
+        <div class="auth-side-image" style="background-image: url('assets/gambar/coffeeshop.jpg');">
+            <div class="image-overlay">
+                <h1>Rasya.co Coffee & Eatery</h1>
+                <p>Gabung Jadi Member & Raih Keuntungan!</p>
+            </div>
+        </div>
+
+        <div class="auth-side-form">
+            <div class="auth-container-inner">
+                <div class="auth-header">
+                    <h2>Daftar Akun</h2>
+                    <p>Gabung jadi member, kumpulkan poin, dan nikmati hadiah eksklusif!</p>
+                </div>
+
+                <form action="index.php?controller=auth&action=prosesRegister" method="POST">
+                    <input type="hidden" name="action" value="register">
+
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" name="nama" class="auth-input" placeholder="Nama sesuai KTP" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" id="username" class="auth-input" placeholder="Buat username unik" required>
+                        <small id="error-username" class="error-text"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor WhatsApp</label>
+                        <input type="number" name="no_telp" id="no_telp" class="auth-input" placeholder="0812..." required>
+                        <small id="error-no_telp" class="error-text"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" class="auth-input" placeholder="Minimal 6 karakter" required>
+                    </div>
+
+                    <button type="submit" class="btn-auth">Buat Akun Member</button>
+                </form>
+
+                <div class="auth-footer">
+                    Sudah jadi member? <a href="index.php?controller=auth&action=login">Login di Sini</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
+
 </html>

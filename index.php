@@ -25,6 +25,11 @@ switch ($controller) {
         $c = new MenuController();
         break;
 
+    case 'fasilitas':
+        require_once 'controllers/FasilitasController.php';
+        $c = new FasilitasController();
+        break;
+
     case 'pelanggan':
         require_once 'controllers/PelangganController.php';
         $c = new PelangganController();
@@ -34,6 +39,27 @@ switch ($controller) {
     default:
         require_once 'controllers/HomeController.php';
         $c = new HomeController();
+        break;
+
+    case 'admin':
+        require_once 'controllers/AdminController.php';
+        $c = new AdminController();
+        break;
+
+    case 'webhook':
+        require_once 'controllers/WebhookController.php';
+        $c = new WebhookController();
+        $c->midtrans_handler();
+        break;
+
+    case 'laporan':
+        require_once 'controllers/LaporanController.php';
+        $c = new LaporanController();
+        break;
+
+    case 'owner':
+        require_once 'controllers/OwnerController.php';
+        $c = new OwnerController();
         break;
 }
 

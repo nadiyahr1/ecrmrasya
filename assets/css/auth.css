@@ -1,0 +1,139 @@
+/* assets/css/auth.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* body {
+    /* Ganti font lama dengan Poppins */
+    /* font-family: 'Poppins', sans-serif; */
+    /* background-color: var(--bg-light); */
+    /* color: var(--text-dark); */
+    /* line-height: 1.6; */
+/* } */ 
+
+.auth-page {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw; /* Memastikan selebar layar */
+    margin: 0;
+    padding: 0;
+}
+
+/* SISI KIRI: GAMBAR (Lebih Lebar - 60%) */
+.auth-side-image {
+    flex: 1.5; /* Memberikan proporsi lebih besar */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: none; /* DEFAULT: Sembunyikan gambar di layar HP */
+    margin: 0;
+}
+
+/* OVERLAY GELAP AGAR TULISAN TERBACA */
+.image-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Overlay hitam transparan */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white; /* Teks berwarna putih */
+    text-align: center;
+    padding: 0px;
+}
+
+.image-overlay h1 {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 40px; /* Ukuran teks besar untuk nama café */
+    font-weight: 800; /* Tebal */
+    margin-bottom: 0px;
+    text-transform: uppercase; /* Huruf kapital semua */
+    letter-spacing: 2px; /* Jarak antar huruf */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Sedikit bayangan pada teks agar lebih menonjol */
+}
+
+.image-overlay p {
+    font-family: "Outfit", sans-serif;
+    font-size: 28px; /* Ukuran teks sedang untuk pesan */
+    font-weight: 300; /* Lebih ramping */
+    letter-spacing: 1px;
+}
+
+/* SISI KANAN: FORM (Lebih ramping - 40%) */
+.auth-side-form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+/* Responsive: Hanya munculkan gambar di desktop */
+@media (min-width: 768px) {
+    .auth-side-image {
+        display: block;
+    }
+}
+
+/* Styling Form tetap konsisten */
+.auth-container-inner {
+    width: 100%;
+    max-width: 350px;
+}
+
+.auth-header h2 {
+    color: var(--primary-brown);
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.form-group{
+    margin-bottom: 10px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #d4ba7f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Jost", sans-serif;
+    transition: 0.3s;
+    outline: none;
+    cursor: pointer;
+}
+
+.auth-footer {
+    margin-top: 25px;
+    text-align: center; /* MEMBUAT TEKS KE TENGAH */
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--primary-brown); /* MEMBERIKAN WARNA COKELAT */
+    font-weight: bold;
+    text-decoration: none; /* MENGHILANGKAN GARIS BAWAH */
+    transition: 0.3s;
+}
+
+.auth-footer a:hover {
+    color: var(--secondary-brown); /* Warna berubah sedikit saat disentuh */
+}

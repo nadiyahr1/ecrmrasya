@@ -1,0 +1,1080 @@
+/* =========================================
+   1. HALAMAN UMUM (CONTAINER & TITLE)
+   ========================================= */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 80vh;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.page-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 15px;
+}
+
+/* =========================================
+   2. FILTER KATEGORI MENU (PILLS)
+   ========================================= */
+.category-pills {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    padding: 8px 20px;
+    background: white;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #555;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    transition: 0.3s;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.pill.active,
+.pill:hover {
+    background: #6F4E37;
+    color: white;
+    border-color: #6F4E37;
+}
+
+/* =========================================
+   3. MENU GRID & CARD (Layout Desktop)
+   ========================================= */
+.menu-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+}
+
+.menu-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.menu-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #eee;
+}
+
+.menu-card-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-card-title {
+    font-size: 17px;
+    margin: 0 0 4px 0;
+    color: #333;
+    font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+}
+
+.menu-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #6F4E37;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Menu Badges */
+.badge-category {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.badge-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Menu Actions */
+.menu-action-group {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-menu-action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+}
+
+.btn-detail {
+    background: #f5f5f5;
+    color: #555;
+}
+
+.btn-detail:hover {
+    background: #e0e0e0;
+}
+
+.btn-add-cart {
+    background: #6F4E37;
+    color: white;
+}
+
+.btn-add-cart:hover {
+    background: #5a3d2b;
+}
+
+.btn-add-cart:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   4. FASILITAS GRID & CARD (Layout Desktop)
+   ========================================= */
+.fas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.fas-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.fas-card:hover {
+    transform: translateY(-5px);
+}
+
+.fas-img-wrapper {
+    position: relative;
+}
+
+.fas-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.fas-price-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #6F4E37;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.fas-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.fas-name {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.fas-desc-wrapper {
+    height: 50px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.fas-desc {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+.fas-action-group {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-fas {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-fas-detail {
+    background: #f5f5f5;
+    color: #555;
+}
+
+.btn-fas-detail:hover {
+    background: #e0e0e0;
+}
+
+.btn-fas-book {
+    background: #6F4E37;
+    color: white;
+}
+
+.btn-fas-book:hover {
+    background: #5a3d2b;
+}
+
+/* =========================================
+   5. HALAMAN DETAIL PROMO
+   ========================================= */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #6F4E37;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    color: #5a3d2b;
+    transform: translateX(-5px);
+}
+
+.detail-promo-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 40px;
+    padding: 30px;
+    overflow: hidden;
+}
+
+.promo-img-wrapper {
+    flex: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+}
+
+.promo-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.promo-info {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.badge-tipe {
+    padding: 6px 15px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+    background: #6F4E37;
+    color: white;
+    width: fit-content;
+}
+
+.promo-detail-title {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    color: #222;
+    line-height: 1.2;
+}
+
+.promo-date {
+    color: #d97706;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.promo-desc {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.syarat-box {
+    background: #fdfaf8;
+    border: 1px solid #f9eed7;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.syarat-box h4 {
+    margin: 0 0 15px 0;
+    color: #6F4E37;
+    font-size: 16px;
+}
+
+.syarat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.syarat-list li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.syarat-list li i {
+    color: #27ae60;
+}
+
+/* KOTAK SALIN KODE */
+.kode-box {
+    background: #fff;
+    border: 2px dashed #6F4E37;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.kode-box p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.kode-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.btn-copy {
+    background: #6F4E37;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-copy:hover {
+    background: #5a3d2b;
+}
+
+.btn-copy.copied {
+    background: #27ae60;
+}
+
+/* =========================================
+   7. HALAMAN DETAIL (MENU & FASILITAS)
+   ========================================= */
+.detail-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    min-height: 80vh;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #6F4E37;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    color: #5a3d2b;
+    transform: translateX(-5px);
+}
+
+.detail-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 30px;
+    overflow: hidden;
+}
+
+.detail-img-wrapper {
+    flex: 1;
+    min-width: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    max-height: 400px;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-info {
+    flex: 1.2;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Bagian Badge */
+.badge-status-detail {
+    padding: 6px 15px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.badge-kategori-detail {
+    background: #333;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.badge-fasilitas {
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    width: fit-content;
+    margin-bottom: 15px;
+}
+
+/* Teks Detail */
+.detail-title {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    color: #333;
+    line-height: 1.2;
+}
+
+.detail-price {
+    font-size: 28px;
+    font-weight: bold;
+    color: #6F4E37;
+    margin-bottom: 25px;
+}
+
+.detail-desc {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.detail-qty-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detail-qty-input {
+    width: 80px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.detail-stok-info {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Tombol Aksi */
+.btn-action-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn-add-detail {
+    background: #6F4E37;
+    color: white;
+}
+
+.btn-add-detail:hover {
+    background: #5a3d2b;
+    transform: translateY(-3px);
+}
+
+.btn-disabled-detail {
+    background: #eee;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Bagian Ulasan (Reviews) */
+.reviews-section {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 40px;
+}
+
+.reviews-title {
+    font-size: 24px;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.review-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.reviewer-name {
+    font-weight: bold;
+    display: block;
+    font-size: 15px;
+    color: #333;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Spesifik Avatar Menu vs Fasilitas (Sesuai Aslinya) */
+.review-avatar-menu {
+    width: 40px;
+    height: 40px;
+    background: #f4f4f4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #6F4E37;
+}
+
+.review-text-menu {
+    margin-top: 10px;
+    color: #555;
+    font-style: italic;
+}
+
+.review-avatar-fas {
+    width: 45px;
+    height: 45px;
+    background: #6F4E37;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.review-text-fas {
+    margin: 0;
+    color: #555;
+    font-style: italic;
+    line-height: 1.6;
+    padding-left: 60px;
+}
+
+.empty-review-menu {
+    color: #888;
+    font-style: italic;
+}
+
+.empty-review-fas {
+    text-align: center;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    color: #888;
+    border: 1px dashed #ddd;
+}
+
+/* =========================================
+   8. HALAMAN BOOKING FASILITAS
+   ========================================= */
+.booking-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.booking-title {
+    color: #6F4E37;
+    margin-top: 0;
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.booking-preview {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+    background: #fdfaf8;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #f5ede6;
+}
+
+.booking-preview img {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.booking-preview strong {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.booking-price-badge {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 16px;
+    background: #e8f5e9;
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: inherit;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-cancel-booking {
+    flex: 1;
+    text-align: center;
+    padding: 16px;
+    background: #f5f5f5;
+    color: #555;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-cancel-booking:hover {
+    background: #e0e0e0;
+}
+
+.btn-submit-booking {
+    flex: 1;
+    padding: 16px;
+    background: #6F4E37;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit-booking:hover {
+    background: #5a3d2b;
+}
+
+/* =========================================
+   MEDIA QUERY (Responsif untuk HP/Tablet)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    .page-container {
+        padding: 80px 15px 20px 15px; 
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+
+    /* Penyesuaian Filter Kategori */
+    .pill {
+        padding: 6px 15px;
+        font-size: 13px;
+    }
+
+    /* ---------- MODE HORIZONTAL UNTUK MENU (HP) ---------- */
+    .menu-grid-container {
+        grid-template-columns: 1fr;
+        /* 1 Kolom Penuh */
+        gap: 15px;
+    }
+
+    .menu-card {
+        flex-direction: row;
+        /* Berubah jadi ke samping */
+        padding: 10px;
+        align-items: flex-start;
+        gap: 0;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .menu-card:active, .menu-card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Matikan animasi angkat di HP */
+
+    .menu-img-wrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+    }
+    
+    .menu-card-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .menu-card-body {
+        padding: 0 0 0 15px;
+        flex: 1;
+        /* Hilangkan padding atas-bawah, tambah padding kiri */
+    }
+
+    .menu-card-title {
+        font-size: 15px;
+        -webkit-line-clamp: 1;
+        /* Potong jadi 1 baris saja di HP */
+    }
+
+    .menu-price {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    /* Pengecilan Badges Menu di HP */
+    .badge-category {
+        top: 5px;
+        left: 5px;
+        font-size: 8px;
+        padding: 2px 6px;
+    }
+
+    .badge-status {
+        top: auto;
+        bottom: 5px; /* Pindahkan status ke bawah gambar agar tidak tumpuk */
+        right: 5px;
+        font-size: 8px;
+        padding: 2px 6px;
+    }
+
+    .btn-menu-action {
+        padding: 7px 5px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+
+
+    /* ---------- MODE HORIZONTAL UNTUK FASILITAS (HP) ---------- */
+    .fas-grid {
+        grid-template-columns: 1fr;
+        /* 1 Kolom Penuh */
+        gap: 15px;
+    }
+
+    .fas-card {
+        flex-direction: row; /* Berubah jadi ke samping */
+        padding: 10px;
+        align-items: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .fas-card:active,
+    .fas-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Matikan animasi angkat di HP */
+
+    .fas-img-wrapper {
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+    }
+
+    .fas-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+    }
+
+    .fas-body {
+        padding: 0 0 0 15px;
+    }
+
+    .fas-name {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    .fas-desc-wrapper {
+        height: auto;
+        margin-bottom: 8px;
+    }
+
+    .fas-desc {
+        font-size: 12px;
+        -webkit-line-clamp: 1;
+        /* Cuma 1 baris di HP */
+    }
+
+    .fas-price-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+        top: 5px;
+        right: 5px;
+    }
+
+    .btn-fas {
+        padding: 7px 5px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+
+    /* ---------- MODE HORIZONTAL UNTUK PROMO (HP) ---------- */
+    .detail-promo-card {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+    
+    .promo-img-wrapper {
+        max-height: 300px;
+    }
+
+    .promo-detail-title {
+        font-size: 24px;
+    }
+
+    .btn-back {
+        display: inline-flex !important; /* Paksa muncul */
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #6F4E37;
+        position: relative;
+        z-index: 10;
+    }
+
+    .btn-back i {
+        font-size: 16px; /* Membuat ikon panah sedikit lebih besar agar mudah ditekan jari */
+    }
+
+    .detail-card {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    .detail-title { font-size: 24px; }
+    .detail-price { font-size: 22px; }
+    .review-text-fas { padding-left: 0; margin-top: 10px; }
+    .booking-container { padding: 25px 20px; margin: 20px auto; }
+    .booking-actions { flex-direction: column-reverse; }
+}

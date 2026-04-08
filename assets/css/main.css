@@ -1,0 +1,1101 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&display=swap'); */
+
+
+/* =========================================
+   1. RESET & BASE STYLE
+   ========================================= */
+body {
+    padding-top: 65px;
+    font-family: "Jost", sans-serif;
+    background-color: #FAFAFA;
+    color: #333;
+    margin: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.line-style {
+    width: 50px;
+    height: 4px;
+    background-color: #5d4037;
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+/* =========================================
+   2. HEADER / NAVBAR
+   ========================================= */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    z-index: 1000;
+    box-sizing: border-box;
+    height: 65px;
+}
+
+.logo-img {
+    height: 90px;
+    display: block;
+}
+
+/* Menu Tengah Desktop */
+nav .menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+nav .menu a {
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+nav .menu a:hover {
+    color: #6F4E37;
+}
+
+/* Bagian Kanan (Cart + Profil + Hamburger) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.auth-buttons a {
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.cart-icon {
+    font-size: 18px;
+    color: #333 !important;
+    padding: 5px;
+}
+
+.cart-icon:hover {
+    color: #6F4E37 !important;
+}
+
+.btn-register {
+    background-color: #6F4E37;
+    color: #fff !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+.btn-register:hover {
+    background-color: #5a3d2b;
+}
+
+.profile-nav {
+    position: relative;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.level-badge {
+    background: #f39c12;
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.arrow-icon {
+    font-size: 12px;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.profile-nav.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 140%;
+    right: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    min-width: 160px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+.dropdown-menu.show {
+    display: flex;
+}
+
+.dropdown-menu a {
+    padding: 12px 15px;
+    color: #444;
+    font-size: 14px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+    background: #fcfcfc;
+    color: #6F4E37;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Hamburger Menu (Sembunyikan di Desktop) */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* =========================================
+   3. HERO & ABOUT
+   ========================================= */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../gambar/banner1.jpeg') center/cover no-repeat;
+    color: white;
+    padding: 120px 0;
+    text-align: left;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 60px;
+}
+
+.hero .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero h1 {
+    font-size: 48px;
+    max-width: 600px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.about-section {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.about-content {
+    flex: 1;
+}
+
+.about-image {
+    flex: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    display: block;
+}
+
+/* =========================================
+   4. MENU SECTION
+   ========================================= */
+.category-pills {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    padding: 8px 20px;
+    background: white;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #555;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    transition: 0.3s;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.pill.active,
+.pill:hover {
+    background: #6F4E37;
+    color: white;
+    border-color: #6F4E37;
+}
+
+.menu-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.card.menu-item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    transition: 0.3s;
+}
+
+.card.menu-item:hover {
+    transform: translateY(-5px);
+}
+
+.menu-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.menu-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.menu-category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.menu-status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.menu-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.card-title {
+    font-size: 17px;
+    margin: 0 0 4px 0;
+    color: #333;
+    font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+}
+
+.price {
+    font-size: 15px;
+    color: #6F4E37;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.menu-action-group {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.form-add-cart {
+    flex: 1;
+    display: flex;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.btn-menu-action {
+    flex: 1;
+    padding: 10px 5px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none !important;
+    width: 100%;
+}
+
+.btn-detail {
+    background: #f5f5f5;
+    color: #555 !important;
+}
+
+.btn-detail:hover {
+    background: #e0e0e0;
+}
+
+.btn-add-cart {
+    background: #6F4E37;
+    color: #ffffff !important;
+}
+
+.btn-add-cart:hover {
+    background: #5a3d2b;
+}
+
+.btn-menu-action:disabled,
+.btn-habis {
+    background: #ccc;
+    color: #666 !important;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   5. FASILITAS
+   ========================================= */
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    /* Diperkecil dari 320px */
+    gap: 25px;
+}
+
+.facility-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.facility-card:hover {
+    transform: translateY(-5px);
+}
+
+.facility-img {
+    width: 100%;
+    height: 180px;
+    /* Diperpendek */
+    object-fit: cover;
+}
+
+.relative-wrapper {
+    position: relative;
+}
+
+.facility-price-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #6F4E37;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.facility-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.facility-title {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 20px;
+}
+
+.facility-desc-wrapper {
+    height: 50px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.facility-desc {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+.fas-action-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-fas {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-fas-detail {
+    background: #f4f4f4;
+    color: #333;
+    border: 1px solid #eee;
+}
+
+.btn-fas-detail:hover {
+    background: #e0e0e0;
+}
+
+.btn-fas-book {
+    background: #6F4E37;
+    color: white;
+}
+
+.btn-fas-book:hover {
+    background: #5a3d2b;
+}
+
+/* 6. PROMO (Slider Horizontal) */
+.promo-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    align-items: flex-start; 
+}
+.promo-wrapper::-webkit-scrollbar { display: none; } /* Chrome, Safari */
+
+.promo-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    /* rasio 4/3 agar bentuknya pas seperti banner promo (tidak terlalu kotak/persegi panjang) */
+    aspect-ratio: 4 / 3; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    background: #f4f4f4;
+    width: 320px; /* Lebar tetap untuk desktop */
+    max-width: 35vw; /* Lebar maksimal di HP agar tetap menyisakan ruang untuk mengintip promo sebelah */
+    flex-shrink: 0; /* Mencegah card mengecil tertekan oleh card lain */
+    scroll-snap-align: start;
+}
+
+.promo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.promo-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.promo-card:hover .promo-img { transform: scale(1.08); }
+.promo-card:hover .promo-overlay { opacity: 1; }
+
+.btn-lihat-promo {
+    background: white;
+    color: #6F4E37;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.promo-card:hover .btn-lihat-promo { transform: translateY(0); }
+
+.promo-empty {
+    width: 100%;
+    text-align: center;
+    color: #999;
+    padding: 40px;
+}
+
+/* =========================================
+   7. ULASAN
+   ========================================= */
+.ulasan-section {
+    margin-bottom: 80px;
+    background: #fdfaf8;
+    padding: 60px 0;
+    border-radius: 30px;
+}
+
+.ulasan-wrapper {
+    overflow-x: auto;
+    display: flex;
+    gap: 20px;
+    padding: 20px 5px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.ulasan-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.ulasan-card {
+    min-width: calc(33.333% - 14px);
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    scroll-snap-align: start;
+    border-left: 4px solid #6F4E37;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ulasan-text {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.ulasan-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.ulasan-hint {
+    text-align: center;
+    color: #aaa;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* =========================================
+   8. CONTACT (Diperbarui, tanpa form)
+   ========================================= */
+.contact-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-bottom: 80px;
+}
+
+.contact-info-centered {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+.contact-desc {
+    color: #777;
+    margin: 0 auto 40px;
+    max-width: 600px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.info-item i {
+    font-size: 18px;
+    color: #6F4E37;
+    background: #fdfaf8;
+    padding: 12px;
+    border-radius: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.info-text h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.info-text p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* =========================================
+   9. FOOTER
+   ========================================= */
+.site-footer {
+    background-color: #2C1E16;
+    color: #fdfaf8;
+    padding: 50px 0 20px;
+    margin-top: 50px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-logo img {
+    height: 100px;
+    margin-bottom: 15px;
+}
+
+.footer-text {
+    color: #d7ccc8;
+    line-height: 1.6;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.social-icons a {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background: #6F4E37;
+    transform: translateY(-3px);
+}
+
+.footer-heading {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #d7ccc8;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
+
+.footer-contact-item {
+    display: flex;
+    gap: 12px;
+    color: #d7ccc8;
+    font-size: 13px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.footer-icon {
+    color: #cda87a;
+    margin-top: 3px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 13px;
+    color: #888;
+}
+
+/* =========================================
+   10. GLOBAL BUTTONS & UTILITIES
+   ========================================= */
+.btn-primary {
+    background: #6F4E37;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: 0.3s;
+    border: 2px solid #6F4E37;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(111, 78, 55, 0.2);
+}
+
+.btn-primary:hover {
+    background: #5a3d2b;
+    border-color: #5a3d2b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(111, 78, 55, 0.3);
+}
+
+.btn-primary-large {
+    font-size: 18px;
+    padding: 15px 35px;
+}
+
+.btn-selengkapnya {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 35px;
+    background-color: transparent;
+    color: #6F4E37;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    border: 2px solid #6F4E37;
+    transition: 0.3s;
+}
+
+.btn-selengkapnya:hover {
+    background-color: #6F4E37;
+    color: white;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mb-60 {
+    margin-bottom: 60px;
+}
+
+.mb-80 {
+    margin-bottom: 80px;
+}
+
+/* =========================================
+   11. RESPONSIVE DESIGN (MEDIA QUERIES)
+   ========================================= */
+
+@media (max-width: 992px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ulasan-card {
+        min-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Header Mobile */
+    .menu-toggle {
+        display: block;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    nav .menu {
+        display: none;
+        /* Sembunyikan by default */
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 75px;
+        left: 0;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        align-items: flex-start;
+    }
+
+    nav .menu.active {
+        display: flex;
+    }
+
+    /* Tampilkan saat toggle diklik */
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .about-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .about-content{
+        order: 1;
+    }
+
+    .about-image{
+        order: 2;
+    }
+
+    .about-image img {
+        height: auto; /* Membiarkan tinggi menyesuaikan secara natural */
+        max-height: 250px; /* Membatasi tinggi gambar di HP agar tidak kepanjangan */
+        object-fit: cover;
+        width: 100%;
+    }
+
+
+    .section-title.text-left {
+        text-align: center !important; /* Buat judul About Us di tengah saat mode HP */
+        margin-bottom: 15px;
+    }
+
+    /* About us gambar dikecilkan di HP */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .about-image {
+        height: 50px !important;
+    }
+
+    /* Menu Card Layout HP */
+    .menu-grid-custom {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card.menu-item {
+        flex-direction: row;
+        padding: 12px;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .menu-image-wrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .menu-info {
+        padding: 0;
+    }
+
+    .card-title {
+        font-size: 15px;
+    }
+
+   .menu-category-badge { 
+        left: 5px; 
+        top: 5px; 
+        font-size: 9px; 
+        padding: 3px 6px; 
+    }
+
+    .menu-status-badge {
+        top: auto; 
+        bottom: 5px; 
+        right: 5px; 
+        font-size: 9px; 
+        padding: 3px 6px;
+    }
+
+    /* Fasilitas Layout HP (Mirip dengan Menu) */
+    .facilities-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .facility-card {
+        flex-direction: row;
+        padding: 10px;
+        align-items: center;
+        gap: 15px;
+        height: auto;
+    }
+
+    .relative-wrapper {
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+    }
+
+    .facility-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+    }
+
+    .facility-price-badge {
+        font-size: 9px;
+        padding: 3px 6px;
+        top: 5px;
+        right: 5px;
+    }
+
+    .facility-card-body {
+        padding: 0;
+    }
+
+    .facility-title {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .facility-desc-wrapper {
+        display: none;
+    }
+
+    /* Deskripsi disembunyikan agar rapi seperti menu */
+    .fas-action-group {
+        margin-top: 5px;
+    }
+
+    .btn-fas {
+        padding: 6px;
+        font-size: 11px;
+    }
+
+    .ulasan-card {
+        min-width: 100%;
+    }
+
+    .contact-container {
+        padding: 20px;
+    }
+
+}
