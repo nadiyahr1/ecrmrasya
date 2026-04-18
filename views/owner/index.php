@@ -119,8 +119,8 @@
 </div> -->
 
 <div class="welcome-section">
-    <h2>Selamat Datang, <?= $_SESSION['nama'] ?? 'Owner' ?>! 👋</h2>
-    <p>Berikut adalah ringkasan performa Rasya.co untuk hari ini, <?= date('d F Y') ?>.</p>
+    <h2>Selamat Datang, <?= $_SESSION['nama'] ?? 'Owner' ?>!</h2>
+    <p>Berikut adalah ringkasan analitik pelanggan dan performa E-CRM Rasya.co.</p>
 </div>
 
 <div class="section-title">Performa Bulan <?= $nama_bulan_ini ?></div>
@@ -147,59 +147,89 @@
     </div>
 </div>
 
-<div class="stat-row">
-    <div class="card-panel">
-        <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;">Reservasi Fasilitas Hari Ini</h3>
-        <table class="data-table">
+
+<div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 20px;">
+    
+    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;"><i class="fa-solid fa-medal" style="color:#f59e0b;"></i> Top 5 Pelanggan Loyal</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
             <thead>
-                <tr>
-                    <th>Waktu</th>
-                    <th>Pelanggan</th>
-                    <th>Fasilitas/Meja</th>
-                    <th>Status</th>
+                <tr style="background: #f8f9fa; text-align: left;">
+                    <th style="padding: 10px; border-bottom: 2px solid #eee;">Nama Pelanggan</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #eee;">Level</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #eee;">Kunjungan</th>
+                    <th style="padding: 10px; border-bottom: 2px solid #eee; text-align: right;">Total Belanja</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($reservasi_hari_ini)): ?>
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: #888; padding: 20px;">Tidak ada reservasi untuk hari ini.</td>
-                    </tr>
+                <?php if(empty($top_customers)): ?>
+                    <tr><td colspan="4" style="text-align: center; padding: 15px; color: #888;">Belum ada data pelanggan.</td></tr>
                 <?php else: ?>
-                    <?php foreach ($reservasi_hari_ini as $res): ?>
-                        <tr>
-                            <td><?= date('H:i', strtotime($res['tgl_reservasi'])) ?></td>
-                            <td><?= htmlspecialchars($res['nama_member'] ?? 'Umum') ?></td>
-                            <td><?= htmlspecialchars($res['nama_fasilitas'] ?? 'Meja') ?></td>
-                            <td>
-                                <span class="badge <?= $res['status'] == 'Dikonfirmasi' ? 'badge-success' : 'badge-warning' ?>">
-                                    <?= $res['status'] ?>
-                                </span>
-                            </td>
-                        </tr>
+                    <?php foreach($top_customers as $top): ?>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px; font-weight: bold; color: #333;"><?= htmlspecialchars($top['nama_member']) ?></td>
+                        <td style="padding: 10px;">
+                            <span style="background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;"><?= $top['nama_level'] ?></span>
+                        </td>
+                        <td style="padding: 10px;"><?= $top['jumlah_kunjungan'] ?> kali</td>
+                        <td style="padding: 10px; text-align: right; color: #10b981; font-weight: bold;">Rp <?= number_format($top['total_belanja'], 0, ',', '.') ?></td>
+                    </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
 
-    <div class="card-panel">
-        <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;">Transaksi Hari Ini</h3>
+    <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;"><i class="fa-solid fa-chart-pie" style="color:#3b82f6;"></i> Persebaran Level Member</h3>
         <div style="display: flex; flex-direction: column; gap: 15px;">
-            <?php if (empty($transaksi_hari_ini)): ?>
-                <div style="text-align: center; color: #888; padding: 20px;">Belum ada transaksi hari ini.</div>
+            <?php 
+            // Hitung total semua member untuk persentase
+            $total_semua = 0;
+            foreach($level_member as $lvl) { $total_semua += $lvl['total']; }
+            
+            if($total_semua == 0): ?>
+                <div style="text-align: center; padding: 15px; color: #888;">Belum ada member.</div>
             <?php else: ?>
-                <?php foreach ($transaksi_hari_ini as $trx): ?>
-                    <div style="border-left: 3px solid #6F4E37; padding-left: 12px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-weight: bold; font-size: 14px; color: #333;">#<?= $trx['id_pesanan'] ?> - <?= htmlspecialchars($trx['nama_member'] ?? 'Umum') ?></div>
-                            <div style="font-size: 12px; color: #888; margin-top: 3px;">
-                                Rp <?= number_format($trx['total_transaksi'], 0, ',', '.') ?> • <?= date('H:i', strtotime($trx['tgl_pesanan'])) ?> WIB
-                            </div>
-                        </div>
-                        <span style="font-size: 11px; font-weight: bold; color: #10b981;"><?= $trx['status'] ?></span>
+                <?php foreach($level_member as $lvl): 
+                    $persen = round(($lvl['total'] / $total_semua) * 100);
+                ?>
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; font-weight: bold;">
+                        <span><?= $lvl['nama_level'] ?></span>
+                        <span><?= $lvl['total'] ?> Orang (<?= $persen ?>%)</span>
                     </div>
+                    <div style="width: 100%; background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="width: <?= $persen ?>%; background: #6F4E37; height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
+    </div>
+</div>
+
+<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="margin: 0; font-size: 16px; color: #333;"><i class="fa-solid fa-user-clock" style="color:#ef4444;"></i> Peringatan Pelanggan Pasif (> 30 Hari)</h3>
+        <a href="index.php?controller=owner&action=analisis_pelanggan" style="font-size: 13px; color: #3b82f6; text-decoration: none; font-weight: bold;">Lihat Semua Data &rarr;</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+        <?php if(empty($pelanggan_pasif)): ?>
+            <div style="grid-column: 1/-1; text-align: center; padding: 15px; color: #10b981; font-weight: bold;">Luar biasa! Semua pelanggan aktif berkunjung bulan ini.</div>
+        <?php else: ?>
+            <?php foreach($pelanggan_pasif as $pasif): ?>
+            <div style="border: 1px solid #fee2e2; background: #fffcfc; padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 15px;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="fa-solid fa-user-slash"></i>
+                </div>
+                <div>
+                    <div style="font-weight: bold; font-size: 14px; color: #333;"><?= htmlspecialchars($pasif['nama_member']) ?></div>
+                    <div style="font-size: 12px; color: #ef4444; margin-top: 3px;">Terakhir datang: <?= $pasif['jumlah_hari'] ?> hari yang lalu</div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>

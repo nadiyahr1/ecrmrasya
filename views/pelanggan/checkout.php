@@ -94,13 +94,14 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                     <h3 class="co-section-title"><i class="fa-solid fa-bell-concierge"></i> Tipe Pemesanan</h3>
                     <div class="co-radio-group">
                         <label class="co-radio-card">
-                            <input type="radio" name="tipe_pemesanan" value="Dine-in" id="tipe_dinein" required onchange="toggleMeja()">
+                            <input type="radio" name="tipe_pemesanan" value="Dine-in" id="tipe_dinein" required onchange="toggleMeja()" <?= !empty($data_fasilitas) ? 'checked' : '' ?>>
                             <div class="co-radio-content">
                                 <i class="fa-solid fa-store"></i>
                                 <span>Makan di Tempat<br>(Dine In)</span>
                             </div>
                         </label>
-                        <label class="co-radio-card">
+                        
+                        <label class="co-radio-card" style="<?= !empty($data_fasilitas) ? 'display: none;' : '' ?>">
                             <input type="radio" name="tipe_pemesanan" value="Takeaway" id="tipe_takeaway" onchange="toggleMeja()">
                             <div class="co-radio-content">
                                 <i class="fa-solid fa-bag-shopping"></i>
@@ -108,6 +109,12 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                             </div>
                         </label>
                     </div>
+
+                    <?php if (!empty($data_fasilitas)): ?>
+                        <small style="color: #6F4E37; display: block; margin-top: 10px;">
+                            <i class="fa-solid fa-circle-info"></i> Tipe pesanan otomatis <b>Dine-in</b> karena Anda menyewa fasilitas.
+                        </small>
+                    <?php endif; ?>
 
                     <div id="box_meja" style="display: none; margin-top: 20px;">
                         <label style="font-weight: bold; font-size: 14px; color: #555;">Pilih Nomor Meja:</label>
@@ -278,12 +285,14 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
     let namaFreeProdukAktif = '';
     let nilaiAsliPromo = 0;
 
+    var adaFasilitas = <?= !empty($data_fasilitas) ? 'true' : 'false' ?>;
+
     function toggleMeja() {
         let isDineIn = document.getElementById('tipe_dinein').checked;
         let boxMeja = document.getElementById('box_meja');
         let inputMeja = document.getElementById('input_meja');
 
-        if (isDineIn) {
+        if (isDineIn && !adaFasilitas) {
             boxMeja.style.display = 'block';
             inputMeja.setAttribute('required', 'required');
         } else {
@@ -292,6 +301,10 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
             inputMeja.value = "";
         }
     }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        toggleMeja();
+    });
 
     function toggleCatatan() {
         let isChecked = document.getElementById('check_catatan').checked;

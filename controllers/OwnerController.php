@@ -52,22 +52,36 @@ class OwnerController
         $stmtPoin->execute([$tahun_ini]);
         $poin_terpakai = $stmtPoin->fetch()['total'] ?? 0;
 
-        // Reservasi Per Hari
-        $sql_res = "SELECT r.*, m.nama_member, f.nama_fasilitas 
-                FROM tb_booking_fasilitas r
-                LEFT JOIN tb_member m ON r.id_booking = m.id_member
-                LEFT JOIN tb_fasilitas f ON r.id_fasilitas = f.id_fasilitas
-                WHERE DATE(r.tgl_sewa) = '$hari_ini'
-                ORDER BY r.tgl_sewa ASC";
-        $reservasi_hari_ini = $this->conn->query($sql_res)->fetchAll();
+        // 1. QUERY TOP PELANGGAN (LIMIT 5)
+        $sqlTop = "SELECT m.nama_member, l.nama_level,
+               SUM(p.total_transaksi) as total_belanja,
+               COUNT(p.id_pesanan) as jumlah_kunjungan
+               FROM tb_member m
+               JOIN tb_level_member l ON m.id_level = l.id_level
+               JOIN tb_pesanan p ON m.id_member = p.id_member
+               WHERE p.status = 'Selesai'
+               GROUP BY m.id_member
+               ORDER BY total_belanja DESC LIMIT 5";
+        $top_customers = $this->conn->query($sqlTop)->fetchAll();
 
-        // Ambil Data Transaksi Hari Ini (Limit 5 transaksi terbaru)
-        $sql_trx = "SELECT p.*, m.nama_member 
-                FROM tb_pesanan p 
-                LEFT JOIN tb_member m ON p.id_member = m.id_member 
-                WHERE DATE(p.tgl_pesanan) = '$hari_ini'
-                ORDER BY p.tgl_pesanan DESC LIMIT 5";
-        $transaksi_hari_ini = $this->conn->query($sql_trx)->fetchAll();
+        // 2. QUERY PELANGGAN PASIF (> 30 hari) - LIMIT 5
+        $sqlPasif = "SELECT m.nama_member, m.no_telp, m.id_member,
+                MAX(p.tgl_pesanan) as kunjungan_terakhir,
+                DATEDIFF(CURDATE(), MAX(p.tgl_pesanan)) as jumlah_hari
+                FROM tb_member m
+                JOIN tb_pesanan p ON m.id_member = p.id_member
+                GROUP BY m.id_member
+                HAVING jumlah_hari >= 30
+                ORDER BY jumlah_hari DESC LIMIT 5";
+        $pelanggan_pasif = $this->conn->query($sqlPasif)->fetchAll();
+
+        // 3. QUERY PERFORMA LEVEL 
+        $sqlLevel = "SELECT l.nama_level, COUNT(m.id_member) as total
+                 FROM tb_level_member l
+                 LEFT JOIN tb_member m ON l.id_level = m.id_level
+                 GROUP BY l.id_level
+                 ORDER BY l.id_level ASC";
+        $level_member = $this->conn->query($sqlLevel)->fetchAll();
 
         // Load Views
         require_once 'views/owner/header.php';
