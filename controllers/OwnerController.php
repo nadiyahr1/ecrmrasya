@@ -24,6 +24,7 @@ class OwnerController
         $page = 'dashboard_owner';
         $bulan_ini = date('Y-m');
         $tahun_ini = date('Y');
+        $hari_ini = date('Y-m-d');
 
         // Membuat format Nama Bulan Indonesia (Contoh: "Maret 2026")
         $bulan_indo = ['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
@@ -50,6 +51,23 @@ class OwnerController
         $stmtPoin = $this->conn->prepare("SELECT SUM(poin) as total FROM tb_history_poin WHERE tipe = 'Keluar' AND YEAR(tgl_perubahan) = ?");
         $stmtPoin->execute([$tahun_ini]);
         $poin_terpakai = $stmtPoin->fetch()['total'] ?? 0;
+
+        // Reservasi Per Hari
+        $sql_res = "SELECT r.*, m.nama_member, f.nama_fasilitas 
+                FROM tb_booking_fasilitas r
+                LEFT JOIN tb_member m ON r.id_booking = m.id_member
+                LEFT JOIN tb_fasilitas f ON r.id_fasilitas = f.id_fasilitas
+                WHERE DATE(r.tgl_sewa) = '$hari_ini'
+                ORDER BY r.tgl_sewa ASC";
+        $reservasi_hari_ini = $this->conn->query($sql_res)->fetchAll();
+
+        // Ambil Data Transaksi Hari Ini (Limit 5 transaksi terbaru)
+        $sql_trx = "SELECT p.*, m.nama_member 
+                FROM tb_pesanan p 
+                LEFT JOIN tb_member m ON p.id_member = m.id_member 
+                WHERE DATE(p.tgl_pesanan) = '$hari_ini'
+                ORDER BY p.tgl_pesanan DESC LIMIT 5";
+        $transaksi_hari_ini = $this->conn->query($sql_trx)->fetchAll();
 
         // Load Views
         require_once 'views/owner/header.php';

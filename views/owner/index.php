@@ -118,6 +118,11 @@
     <p style="margin: 0 0 25px 0; color: #777; font-size: 14px;">Ringkasan performa bisnis dan retensi pelanggan Rasya.co.</p>
 </div> -->
 
+<div class="welcome-section">
+    <h2>Selamat Datang, <?= $_SESSION['nama'] ?? 'Owner' ?>! 👋</h2>
+    <p>Berikut adalah ringkasan performa Rasya.co untuk hari ini, <?= date('d F Y') ?>.</p>
+</div>
+
 <div class="section-title">Performa Bulan <?= $nama_bulan_ini ?></div>
 <div class="stat-row">
     <div class="stat-card green">
@@ -142,31 +147,37 @@
     </div>
 </div>
 
-<div class="dashboard-grid">
+<div class="stat-row">
     <div class="card-panel">
-        <h3 style="margin: 0; font-size: 16px; color: #333;">Reservasi Fasilitas (Hari Ini)</h3>
-        <table class="table-mini">
+        <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;">Reservasi Fasilitas Hari Ini</h3>
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>Waktu</th>
-                    <th>Nama Pelanggan</th>
-                    <th>Fasilitas</th>
+                    <th>Pelanggan</th>
+                    <th>Fasilitas/Meja</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>14:00</td>
-                    <td>Budi Santoso</td>
-                    <td>Meja VIP 1</td>
-                    <td><span class="badge badge-success">Dikonfirmasi</span></td>
-                </tr>
-                <tr>
-                    <td>16:30</td>
-                    <td>Siska Putri</td>
-                    <td>Meeting Room</td>
-                    <td><span class="badge badge-success">Dikonfirmasi</span></td>
-                </tr>
+                <?php if (empty($reservasi_hari_ini)): ?>
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #888; padding: 20px;">Tidak ada reservasi untuk hari ini.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($reservasi_hari_ini as $res): ?>
+                        <tr>
+                            <td><?= date('H:i', strtotime($res['tgl_reservasi'])) ?></td>
+                            <td><?= htmlspecialchars($res['nama_member'] ?? 'Umum') ?></td>
+                            <td><?= htmlspecialchars($res['nama_fasilitas'] ?? 'Meja') ?></td>
+                            <td>
+                                <span class="badge <?= $res['status'] == 'Dikonfirmasi' ? 'badge-success' : 'badge-warning' ?>">
+                                    <?= $res['status'] ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -174,14 +185,21 @@
     <div class="card-panel">
         <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333;">Transaksi Hari Ini</h3>
         <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="border-left: 3px solid #6F4E37; padding-left: 12px;">
-                <div style="font-weight: bold; font-size: 14px; color: #333;">#PES-00124</div>
-                <div style="font-size: 12px; color: #888; margin-top: 3px;">Rp 125.000 • 10 Menit lalu</div>
-            </div>
-            <div style="border-left: 3px solid #6F4E37; padding-left: 12px;">
-                <div style="font-weight: bold; font-size: 14px; color: #333;">#PES-00123</div>
-                <div style="font-size: 12px; color: #888; margin-top: 3px;">Rp 45.000 • 25 Menit lalu</div>
-            </div>
+            <?php if (empty($transaksi_hari_ini)): ?>
+                <div style="text-align: center; color: #888; padding: 20px;">Belum ada transaksi hari ini.</div>
+            <?php else: ?>
+                <?php foreach ($transaksi_hari_ini as $trx): ?>
+                    <div style="border-left: 3px solid #6F4E37; padding-left: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 14px; color: #333;">#<?= $trx['id_pesanan'] ?> - <?= htmlspecialchars($trx['nama_member'] ?? 'Umum') ?></div>
+                            <div style="font-size: 12px; color: #888; margin-top: 3px;">
+                                Rp <?= number_format($trx['total_transaksi'], 0, ',', '.') ?> • <?= date('H:i', strtotime($trx['tgl_pesanan'])) ?> WIB
+                            </div>
+                        </div>
+                        <span style="font-size: 11px; font-weight: bold; color: #10b981;"><?= $trx['status'] ?></span>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>
