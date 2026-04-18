@@ -194,7 +194,7 @@ if ($next_level) {
                 if (empty($favorit)) : ?>
                     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
                         <p>Kamu belum memiliki menu favorit. Yuk, mulai pesan menu pilihanmu!</p>
-                        <a href="../menu_publik.php" style="color: #6F4E37; font-weight: bold;">Lihat Menu Cafe</a>
+                        <a href="<?= $base_url ?>index.php?controller=menu&action=index" style="color: #6F4E37; font-weight: bold;">Lihat Menu Cafe</a>
                     </div>
                     <?php else :
                     foreach ($favorit as $f): ?>

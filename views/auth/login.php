@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -37,9 +38,10 @@
                         <input type="text" name="username" class="auth-input" placeholder="Masukkan username" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>Password</label>
-                        <input type="password" name="password" class="auth-input" placeholder="Masukkan password" required>
+                        <input type="password" name="password" id="password" class="auth-input" placeholder="Masukkan password" required>
+                        <i class="fa-solid fa-eye" id="togglePassword" style="position: absolute; right: 15px; top: 43px; cursor: pointer; color: #6F4E37;"></i>
                     </div>
 
                     <button type="submit" class="btn-auth">Masuk Sekarang</button>
@@ -52,6 +54,19 @@
         </div>
     </div>
 
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function(e) {
+            // Ubah tipe input
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // Ubah ikon mata (buka/tutup)
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 
 </html>

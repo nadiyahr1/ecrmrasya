@@ -96,36 +96,51 @@ class AuthController
     }
 
     // PROSES REGISTER
-    public function prosesRegister()
+    public function prosesRegistrasi()
     {
-        $nama     = $_POST['nama'];
-        $username = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $no_telp  = $_POST['no_telp'];
+        $nama = trim($_POST['nama'] ?? '');
+        $username = trim($_POST['username'] ?? '');
+        $no_telp = trim($_POST['no_telp'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        // ==========================================
+        // 1. BLOK VALIDASI ATURAN REGISTRASI
+        // ==========================================
+        
+        // A. Validasi Username: Harus huruf kecil / angka, tanpa spasi, minimal 5 karakter
+        if (!preg_match('/^[a-z0-9]{5,}$/', $username)) {
+            echo "<script>alert('Gagal: Username harus huruf kecil dan/atau angka tanpa spasi (Minimal 5 karakter)!'); window.history.back();</script>";
+            exit;
+        }
+
+        // B. Validasi Password: Minimal 8 char, wajib ada huruf Besar, huruf kecil, dan angka
+        if (!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/', $password)) {
+            echo "<script>alert('Gagal: Password minimal 8 karakter, wajib mengandung huruf besar, huruf kecil, dan angka!'); window.history.back();</script>";
+            exit;
+        }
+
+        // C. Validasi No. WhatsApp: Harus berawalan 08 atau +62, panjang 10-15 digit
+        if (!preg_match('/^(08|\+62)[0-9]{8,13}$/', $no_telp)) {
+            echo "<script>alert('Gagal: Format No. Telepon harus berawalan 08 atau +62 (10 hingga 15 digit angka)!'); window.history.back();</script>";
+            exit;
+        }
+
+        // ==========================================
+        // 2. LANJUTKAN PROSES SIMPAN KE DATABASE
+        // ==========================================
+        
+        // Enkripsi password menggunakan bcrypt bawaan PHP
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         try {
-            // 1. CEK DUPLIKAT NOMOR TELEPON (Tambahan Proteksi)
-            $stmt_cek = $this->conn->prepare("SELECT id_member FROM tb_member WHERE no_telp = ?");
-            $stmt_cek->execute([$no_telp]);
-            if ($stmt_cek->rowCount() > 0) {
-                echo "<script>alert('Nomor telepon sudah terdaftar! Gunakan nomor lain.'); window.history.back();</script>";
-                exit;
-            }
+            $stmt = $this->conn->prepare("INSERT INTO tb_member (nama_member, username, password, no_telp, tgl_daftar, poin, id_level) VALUES (?, ?, ?, ?, CURDATE(), 0, 1)");
+            $stmt->execute([$nama, $username, $hashed_password, $no_telp]);
 
-            $sql = "INSERT INTO tb_member 
-                (id_level, poin, jml_transaksi, total_belanja, nama_member, username, password, no_telp, status_akun) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            $stmt = $this->conn->prepare($sql);
-            // Menggunakan 'Pending' sesuai enum database Anda
-            $stmt->execute([1, 10, 0, 0, $nama, $username, $password, $no_telp, 'Pending']);
-
-            // Pesan notifikasi yang lebih informatif
             echo "<script>alert('Registrasi berhasil! Akun Anda sedang menunggu verifikasi oleh Admin. Silakan cek secara berkala.'); window.location='index.php?controller=auth&action=login';</script>";
         } catch (PDOException $e) {
-            // 2. CEK DUPLIKAT USERNAME (Melalui Error Code Database)
+            // CEK DUPLIKAT USERNAME/NO TELP DARI DATABASE
             if ($e->getCode() == 23000) {
-                echo "<script>alert('Username sudah digunakan! Silakan pilih username lain.'); window.history.back();</script>";
+                echo "<script>alert('Pendaftaran Gagal: Username atau Nomor Telepon tersebut sudah terdaftar di sistem!'); window.history.back();</script>";
             } else {
                 echo "Error: " . $e->getMessage();
             }

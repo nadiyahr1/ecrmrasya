@@ -103,21 +103,33 @@ html, body {
     margin-top: 5px;
 }
 
+/* Styling Dasar Tombol Auth */
 .btn-auth {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin-top: 20px;
-    background: #d4ba7f;
+    background: #6F4E37;
     color: white;
     border: none;
     border-radius: 10px;
-    border-radius: 12px;
     font-size: 16px;
     font-weight: bold;
-    font-family: "Jost", sans-serif;
-    transition: 0.3s;
-    outline: none;
     cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Efek bayangan dasar */
+    transition: all 0.3s ease; 
+}
+
+/* Efek Hover (Saat mouse berada di atas tombol) */
+.btn-auth:hover {
+    background: #5A3F2C;
+    transform: translateY(-2px); /* Tombol seakan terangkat ke atas sedikit */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Bayangan membesar karena terangkat */
+}
+
+.btn-auth:active {
+    background: #483122; 
+    transform: translateY(1px); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .auth-footer {
