@@ -31,7 +31,7 @@ if ($next_level) {
 }
 ?>
 
-<div style="max-width: 900px; margin: 30px auto; padding: 65px 20px;">
+<div style="max-width: 900px; margin: 30px auto; padding: 25px 20px;">
     <div style="background: linear-gradient(135deg, #d4af37, #f1c40f); padding: 30px; border-radius: 20px; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); position: relative; overflow: hidden;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
             <div>

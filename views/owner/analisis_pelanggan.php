@@ -180,7 +180,7 @@
                 <tr>
                     <th>Nama Pelanggan</th>
                     <th>No. WhatsApp</th>
-                    <th>Terakhir Datang</th>
+                    <th>Terakhir Transaksi</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -188,10 +188,10 @@
                 <?php if (!empty($pelanggan_pasif)): ?>
                     <?php foreach ($pelanggan_pasif as $pasif): ?>
                         <tr>
-                            <td style="font-weight: 600;"><?= htmlspecialchars($pasif['nama']) ?></td>
+                            <td style="font-weight: 600;"><?= htmlspecialchars($pasif['nama_member']) ?></td>
                             <td>
-                                <a href="https://wa.me/<?= $pasif['whatsapp'] ?>" target="_blank" style="color: #25D366; text-decoration: none; font-size: 13px; font-weight: bold;">
-                                    <?= htmlspecialchars($pasif['whatsapp']) ?>
+                                <a href="https://wa.me/<?= $pasif['no_telp'] ?>" target="_blank" style="color: #25D366; text-decoration: none; font-size: 13px; font-weight: bold;">
+                                    <?= htmlspecialchars($pasif['no_telp']) ?>
                                 </a>
                             </td>
                             <td style="font-size: 13px; color: #666;">

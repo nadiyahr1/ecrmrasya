@@ -114,10 +114,10 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 30px; text-align: right;">
+    <div style="margin-top: 50px; text-align: right; margin-right: 30px;">
         <p>Kisaran, <?= date('d F Y') ?></p>
-        <br><br><br>
-        <p>( ____________________ )</p>
+        <p style="margin-bottom: 80px;">Owner Rasya.co,</p>
+        <p><strong>( <?= $nama_owner ?> )</strong></p>
     </div>
 </body>
 

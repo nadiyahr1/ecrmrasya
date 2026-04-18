@@ -11,43 +11,72 @@
             --sidebar-bg: #ffffff;
             --text-color: #333;
             --border: #e0e0e0;
+            --sidebar-width: 260px;
+            --sidebar-mini-width: 75px;
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             background: #f8f9fa;
+            overflow-x: hidden;
         }
 
         /* Sidebar Fixed */
         .sidebar {
-            width: 260px;
+            width: var(--sidebar-width);
             background: var(--sidebar-bg);
             border-right: 1px solid var(--border);
             height: 100vh;
             position: fixed;
-            top: 0;
-            left: 0;
             z-index: 1000;
             display: flex;
             flex-direction: column;
+            transition: width 0.3s ease;
+            overflow-x: hidden;
+            top: 0;
+            left: 0;
         }
 
         .sidebar-logo {
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #f8f8f8;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
 
         .sidebar-logo img {
             max-width: 80px;
             height: auto;
+            transition: 0.3s;
         }
 
         .menu-container {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding-bottom: 40px;
+        }
+
+        .menu-icon {
+            width: 30px;
+            text-align: center;
+            font-size: 16px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .menu-header {
+            padding: 15px 25px 5px;
+            font-size: 11px;
+            color: #aaa;
+            font-weight: bold;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .menu-item {
@@ -60,6 +89,7 @@
             border-left: 4px solid transparent;
             transition: 0.2s;
             user-select: none;
+            white-space: nowrap;
         }
 
         .menu-item:hover,
@@ -81,16 +111,22 @@
 
         .submenu-item {
             padding: 10px 25px 10px 55px;
-            display: block;
+            display: flex;
+            align-items: center;
             text-decoration: none;
             color: #666;
             font-size: 14px;
+            white-space: nowrap;
         }
 
-        .submenu-item:hover,
-        .submenu-item.active {
+        .submenu-item .menu-icon {
+            font-size: 8px;
+            width: 20px;
+            margin-right: 5px;
+        }
+
+        .submenu-item:hover {
             color: var(--primary-brown);
-            font-weight: bold;
         }
 
         .arrow-icon {
@@ -104,11 +140,50 @@
             transform: rotate(180deg);
         }
 
-        /* Top Bar Header */
+        /* EFEK MINI SIDEBAR */
+        body.sidebar-mini .sidebar {
+            width: var(--sidebar-mini-width);
+        }
+
+        body.sidebar-mini .top-bar {
+            left: var(--sidebar-mini-width);
+        }
+
+        body.sidebar-mini .content {
+            margin-left: var(--sidebar-mini-width);
+            width: calc(100% - var(--sidebar-mini-width));
+        }
+
+        body.sidebar-mini .sidebar-logo img {
+            max-width: 45px;
+        }
+
+        body.sidebar-mini .menu-text,
+        body.sidebar-mini .arrow-icon,
+        body.sidebar-mini .menu-header {
+            display: none;
+        }
+
+        body.sidebar-mini .menu-item {
+            padding: 15px 0;
+            justify-content: center;
+        }
+
+        body.sidebar-mini .menu-icon {
+            margin-right: 0;
+            font-size: 20px;
+        }
+
+        body.sidebar-mini .submenu-item {
+            padding: 12px 0;
+            justify-content: center;
+        }
+
+        /* TOP BAR */
         .top-bar {
             position: fixed;
             top: 0;
-            left: 260px;
+            left: var(--sidebar-width);
             right: 0;
             height: 70px;
             background: white;
@@ -118,6 +193,22 @@
             justify-content: space-between;
             padding: 0 30px;
             z-index: 999;
+            transition: left 0.3s ease;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary-brown);
+            cursor: pointer;
+            padding: 5px;
+            margin-right: 15px;
+            transition: 0.2s;
+        }
+
+        .hamburger-btn:hover {
+            color: #333;
         }
 
         .profile-container {
@@ -207,11 +298,12 @@
         }
 
         .content {
-            margin-left: 260px;
+            margin-left: var(--sidebar-width);
             margin-top: 70px;
             padding: 40px;
-            width: calc(100% - 260px);
+            width: calc(100% - var(--sidebar-width));
             box-sizing: border-box;
+            transition: margin-left 0.3s ease, width 0.3s ease;
         }
     </style>
 </head>
@@ -224,29 +316,47 @@
         </div>
 
         <div class="menu-container">
-            <a href="index.php?controller=owner&action=index" class="menu-item <?= ($page == 'dashboard_owner') ? 'active' : '' ?>">Dashboard</a>
+            <a href="index.php?controller=owner&action=index" class="menu-item <?= ($page == 'dashboard_owner') ? 'active' : '' ?>">
+                <i class="fa-solid fa-chart-line menu-icon"></i>
+                <span class="menu-text">Dashboard</span>
+            </a>
 
-            <div class="menu-item" onclick="handleToggle('dropLaporan', this)">
-                Laporan
-                <i class="fa-solid fa-chevron-down arrow-icon <?= (strpos($page, 'laporan') !== false) ? 'putar-panah' : '' ?>"></i>
-            </div>
-            <div id="dropLaporan" class="sub-menu-content <?= (strpos($page, 'laporan') !== false) ? 'buka-dong' : '' ?>">
-                <a href="index.php?controller=laporan&action=index" class="submenu-item <?= ($page == 'laporan_penjualan') ? 'active' : '' ?>">• Laporan Penjualan</a>
-                <a href="index.php?controller=laporan&action=statistikPoin" class="submenu-item <?= ($page == 'laporan_statistik_poin') ? 'active' : '' ?>">• Statistik Poin</a>
-                <a href="index.php?controller=laporan&action=laporanPromo" class="submenu-item <?= ($page == 'laporan_promo') ? 'active' : '' ?>">• Laporan Promo</a>
-            </div>
+            <div class="menu-header">Analisis & Laporan</div>
 
-            <a href="index.php?controller=owner&action=analisis_pelanggan" class="menu-item <?= ($page == 'analisis_pelanggan') ? 'active' : '' ?>">Analisis Pelanggan</a>
+            <a href="index.php?controller=laporan&action=index" class="menu-item <?= ($page == 'laporan_penjualan') ? 'active' : '' ?>">
+                <i class="fa-solid fa-file-lines menu-icon"></i>
+                <span class="menu-text">Laporan Penjualan</span>
+            </a>
 
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 25px;">
-            <div style="padding: 0 25px 5px; font-size: 11px; color: #aaa; font-weight: bold; text-transform: uppercase;">Akses Owner</div>
+            <a href="index.php?controller=laporan&action=laporanPromo" class="menu-item <?= ($page == 'laporan_promo') ? 'active' : '' ?>">
+                <i class="fa-solid fa-tags menu-icon"></i>
+                <span class="menu-text">Laporan Promo</span>
+            </a>
 
-            <a href="index.php?controller=owner&action=manajemen_admin" class="menu-item <?= ($page == 'manajemen_admin') ? 'active' : '' ?>">Manajemen Admin</a>
+            <a href="index.php?controller=owner&action=analisis_pelanggan" class="menu-item <?= ($page == 'analisis_pelanggan') ? 'active' : '' ?>">
+                <i class="fa-solid fa-users-viewfinder menu-icon"></i>
+                <span class="menu-text">Analisis Pelanggan</span>
+            </a>
+
+            <a href="index.php?controller=laporan&action=statistikPoin" class="menu-item <?= ($page == 'laporan_statistik_poin') ? 'active' : '' ?>">
+                <i class="fa-solid fa-coins menu-icon"></i>
+                <span class="menu-text">Statistik Poin</span>
+            </a>
+
+            <div class="menu-header">Sistem</div>
+
+            <a href="index.php?controller=owner&action=manajemen_admin" class="menu-item <?= ($page == 'manajemen_admin') ? 'active' : '' ?>">
+                <i class="fa-solid fa-user-tie menu-icon"></i>
+                <span class="menu-text">Manajemen Admin</span>
+            </a>
         </div>
     </div>
 
     <div class="top-bar">
-        <div>
+        <div style="display: flex; align-items: center;">
+            <button class="hamburger-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <strong style="text-transform: capitalize; font-size: 18px; color: var(--primary-brown);">
                 <?= str_replace('_', ' ', $page) ?>
             </strong>
@@ -255,12 +365,12 @@
         <div class="profile-container" onclick="toggleProfileDropdown()">
             <div class="profile-info">
                 <p class="profile-name"><?= $_SESSION['nama'] ?? 'Owner' ?></p>
-                <p class="profile-role">Owner</p>
+                <p class="profile-role"><?= $_SESSION['role'] ?? 'Owner' ?></p>
             </div>
             <div class="profile-avatar">
-                <i class="fa-solid fa-crown" style="color: #d4af37;"></i>
+                <i class="fa-solid fa-crown" style="color: #f59e0b;"></i>
             </div>
-            <i class="fa-solid fa-chevron-down arrow-icon" id="panahProfil"></i>
+            <i class="fa-solid fa-chevron-down arrow-icon" id="panahProfil" style="margin-left: 0;"></i>
 
             <div id="profileDropdown" class="profile-dropdown">
                 <a href="index.php?controller=owner&action=profil" class="dropdown-item">
@@ -275,31 +385,3 @@
     </div>
 
     <div class="content">
-
-        <script>
-            function handleToggle(id, element) {
-                var target = document.getElementById(id);
-                var icon = element.querySelector('.arrow-icon');
-                target.classList.toggle('buka-dong');
-                if (icon) icon.classList.toggle('putar-panah');
-            }
-
-            function toggleProfileDropdown() {
-                document.getElementById("profileDropdown").classList.toggle("show");
-                document.getElementById("panahProfil").classList.toggle("putar-panah");
-            }
-
-            window.onclick = function(event) {
-                if (!event.target.closest('.profile-container')) {
-                    var dropdowns = document.getElementsByClassName("profile-dropdown");
-                    var panah = document.getElementById("panahProfil");
-                    for (var i = 0; i < dropdowns.length; i++) {
-                        var openDropdown = dropdowns[i];
-                        if (openDropdown.classList.contains('show')) {
-                            openDropdown.classList.remove('show');
-                            panah.classList.remove('putar-panah');
-                        }
-                    }
-                }
-            }
-        </script>

@@ -393,61 +393,82 @@ class AdminController
     }
 
     public function data_pelanggan()
-    {
-        // 1. TANGKAP INPUTAN PENCARIAN & PAGINATION
-        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-        $limit  = 10;
-        $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
-        $offset = ($halaman_aktif - 1) * $limit;
+{
+    // 1. TANGKAP INPUTAN PENCARIAN, LIMIT, & PAGINATION
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    // --- KODE BARU: Tangkap limit dari dropdown, default 10 ---
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10; 
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        // 2. QUERY HITUNG TOTAL MEMBER (Untuk Statistik & Pagination)
-        $where_sql = "1=1";
-        $params = [];
-        if (!empty($search)) {
-            $where_sql .= " AND (m.nama_member LIKE ? OR m.email LIKE ? OR m.no_telp LIKE ?)";
-            $params[] = "%$search%";
-            $params[] = "%$search%";
-            $params[] = "%$search%";
-        }
-
-        $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_member m WHERE $where_sql");
-        $stmt_total->execute($params);
-        $total_member = $stmt_total->fetchColumn();
-        $total_halaman = ceil($total_member / $limit);
-
-        // 3. STATISTIK TOTAL POIN BEREDAR (Menggunakan kolom 'poin')
-        $tp = $this->conn->query("SELECT SUM(poin) FROM tb_member")->fetchColumn();
-        $total_poin_beredar = $tp ?: 0;
-
-        // 4. AMBIL DATA MEMBER & LEVEL (Tanpa l.diskon agar aman)
-        $query = "SELECT m.*, l.nama_level 
-                  FROM tb_member m 
-                  LEFT JOIN tb_level_member l ON m.id_level = l.id_level 
-                  WHERE $where_sql 
-                  ORDER BY m.poin DESC, m.nama_member ASC 
-                  LIMIT $limit OFFSET $offset";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute($params);
-        $members = $stmt->fetchAll();
-
-        $page = 'data_pelanggan';
-
-        // 5. PANGGIL VIEW
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/data_pelanggan.php';
-        require_once 'views/admin/footer.php';
+    // 2. QUERY HITUNG TOTAL MEMBER (Untuk Statistik & Pagination)
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND (m.nama_member LIKE ? OR m.email LIKE ? OR m.no_telp LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
     }
+
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_member m WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_member = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_member / $limit);
+
+    // 3. STATISTIK TOTAL POIN BEREDAR (Menggunakan kolom 'poin')
+    $tp = $this->conn->query("SELECT SUM(poin) FROM tb_member")->fetchColumn();
+    $total_poin_beredar = $tp ?: 0;
+
+    // 4. AMBIL DATA MEMBER & LEVEL
+    $query = "SELECT m.*, l.nama_level 
+              FROM tb_member m 
+              LEFT JOIN tb_level_member l ON m.id_level = l.id_level 
+              WHERE $where_sql 
+              ORDER BY m.poin DESC, m.nama_member ASC 
+              LIMIT $limit OFFSET $offset";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $members = $stmt->fetchAll();
+
+    $page = 'data_pelanggan';
+
+    // 5. PANGGIL VIEW
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/data_pelanggan.php';
+    require_once 'views/admin/footer.php';
+}
 
     // MANAJEMEN KATEGORI MENU 
     public function kategori_menu()
-    {
-        $kategori = $this->conn->query("SELECT * FROM tb_kategori ORDER BY id_kategori ASC")->fetchAll();
+{
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        $page = 'kategori_menu';
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/kategori_menu.php';
-        require_once 'views/admin/footer.php';
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND nama_kategori LIKE ?";
+        $params[] = "%$search%";
     }
+
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_kategori WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_data = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_data / $limit);
+
+    $query = "SELECT * FROM tb_kategori WHERE $where_sql ORDER BY id_kategori DESC LIMIT $limit OFFSET $offset";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $kategori = $stmt->fetchAll();
+
+    $page = 'kategori_menu';
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/kategori_menu.php';
+    require_once 'views/admin/footer.php';
+}
 
     // CRUD KATEGORI MENU
     public function tambah_kategori()
@@ -494,45 +515,41 @@ class AdminController
 
     // --- MANAJEMEN DAFTAR MENU ---
     public function menu()
-    {
-        // PENCARIAN & PAGINATION
-        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-        $limit  = 10;
-        $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
-        $offset = ($halaman_aktif - 1) * $limit;
+{
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        $where_sql = "1=1";
-        $params = [];
-        if (!empty($search)) {
-            $where_sql .= " AND (m.nama_menu LIKE ? OR k.nama_kategori LIKE ?)";
-            $params[] = "%$search%";
-            $params[] = "%$search%";
-        }
-
-        // Hitung total untuk pagination
-        $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_menu m JOIN tb_kategori k ON m.id_kategori = k.id_kategori WHERE $where_sql");
-        $stmt_total->execute($params);
-        $total_data = $stmt_total->fetchColumn();
-        $total_halaman = ceil($total_data / $limit);
-
-        // AMBIL DATA MENU
-        $query = "SELECT m.*, k.nama_kategori 
-                  FROM tb_menu m 
-                  JOIN tb_kategori k ON m.id_kategori = k.id_kategori 
-                  WHERE $where_sql 
-                  ORDER BY m.id_menu ASC LIMIT $limit OFFSET $offset";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute($params);
-        $menus = $stmt->fetchAll();
-
-        // AMBIL KATEGORI UNTUK DROPDOWN MODAL
-        $categories = $this->conn->query("SELECT * FROM tb_kategori ORDER BY nama_kategori ASC")->fetchAll();
-
-        $page = 'menu';
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/menu.php';
-        require_once 'views/admin/footer.php';
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND (m.nama_menu LIKE ? OR k.nama_kategori LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
     }
+
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_menu m LEFT JOIN tb_kategori k ON m.id_kategori = k.id_kategori WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_data = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_data / $limit);
+
+    $query = "SELECT m.*, k.nama_kategori 
+              FROM tb_menu m 
+              LEFT JOIN tb_kategori k ON m.id_kategori = k.id_kategori 
+              WHERE $where_sql 
+              ORDER BY m.id_menu DESC LIMIT $limit OFFSET $offset";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $menus = $stmt->fetchAll();
+
+    $kategoris = $this->conn->query("SELECT * FROM tb_kategori")->fetchAll();
+
+    $page = 'menu';
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/menu.php';
+    require_once 'views/admin/footer.php';
+}
 
     // CRUD DAFTAR MENU
     public function tambah_menu()
@@ -629,17 +646,35 @@ class AdminController
     // CRUD FASILITAS KAFE
     // Tampil Data
     public function fasilitas()
-    {
-        $query = "SELECT * FROM tb_fasilitas ORDER BY id_fasilitas ASC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        $fasilitas = $stmt->fetchAll();
+{
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        $page = 'fasilitas';
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/fasilitas.php';
-        require_once 'views/admin/footer.php';
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND (nama_fasilitas LIKE ? OR deskripsi LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
     }
+
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_fasilitas WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_data = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_data / $limit);
+
+    $query = "SELECT * FROM tb_fasilitas WHERE $where_sql ORDER BY id_fasilitas DESC LIMIT $limit OFFSET $offset";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $fasilitas = $stmt->fetchAll();
+
+    $page = 'fasilitas';
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/fasilitas.php';
+    require_once 'views/admin/footer.php';
+}
 
     // Tambah Data
     public function tambah_fasilitas()
@@ -731,27 +766,52 @@ class AdminController
     // CRUD PROMO & VOUCHER
     // Tampil Data Promo
     public function promo()
-    {
-        $this->conn->query("UPDATE tb_promo SET status_promo = 'Nonaktif' WHERE tgl_selesai < CURDATE() AND status_promo = 'Aktif'");
+{
+    // 1. Update otomatis status promo yang sudah lewat tanggal selesai
+    $this->conn->query("UPDATE tb_promo SET status_promo = 'Nonaktif' WHERE tgl_selesai < CURDATE() AND status_promo = 'Aktif'");
 
-        $query = "SELECT p.*, l.nama_level 
-                  FROM tb_promo p 
-                  LEFT JOIN tb_level_member l ON p.target_level = l.id_level 
-                  ORDER BY p.id_promo DESC";
-        $promos = $this->conn->query($query)->fetchAll();
+    // 2. Tangkap parameter pencarian, limit, dan halaman
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        $levels = $this->conn->query("SELECT * FROM tb_level_member ORDER BY id_level ASC")->fetchAll();
-
-        // AMBIL DATA MENU UNTUK DROPDOWN PROMO PRODUK
-        $menus = $this->conn->query("SELECT id_menu, nama_menu FROM tb_menu WHERE status_menu = 'Tersedia' ORDER BY nama_menu ASC")->fetchAll();
-
-        $page = 'promo';
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/promo.php';
-        require_once 'views/admin/footer.php';
+    // 3. Hitung Total Data untuk Pagination
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND (p.nama_promo LIKE ? OR p.kode_promo LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
     }
 
-    // Tambah Promo
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_promo p WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_data = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_data / $limit);
+
+    // 4. Ambil Data Promo dengan LIMIT & OFFSET
+    $query = "SELECT p.*, l.nama_level 
+              FROM tb_promo p 
+              LEFT JOIN tb_level_member l ON p.target_level = l.id_level 
+              WHERE $where_sql 
+              ORDER BY p.id_promo DESC 
+              LIMIT $limit OFFSET $offset";
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $promos = $stmt->fetchAll();
+
+    // 5. Data untuk Dropdown di Modal
+    $levels = $this->conn->query("SELECT * FROM tb_level_member ORDER BY id_level ASC")->fetchAll();
+    $menus  = $this->conn->query("SELECT id_menu, nama_menu FROM tb_menu WHERE status_menu = 'Tersedia' ORDER BY nama_menu ASC")->fetchAll();
+
+    $page = 'promo';
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/promo.php';
+    require_once 'views/admin/footer.php';
+}
+
     // Tambah Promo
     public function tambah_promo()
     {
@@ -868,19 +928,45 @@ class AdminController
 
     // 1. Tampil Halaman Ulasan
     public function ulasan()
-    {
-        // Mengambil data ulasan sekaligus nama member
-        $query = "SELECT u.*, m.nama_member 
-                  FROM tb_ulasan u 
-                  LEFT JOIN tb_member m ON u.id_member = m.id_member 
-                  ORDER BY u.tgl_ulasan DESC";
-        $ulasan = $this->conn->query($query)->fetchAll();
+{
+    // 1. Tangkap parameter pencarian, limit, dan halaman
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+    $halaman_aktif = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+    $offset = ($halaman_aktif - 1) * $limit;
 
-        $page = 'ulasan';
-        require_once 'views/admin/header.php';
-        require_once 'views/admin/ulasan.php';
-        require_once 'views/admin/footer.php';
+    // 2. Hitung Total Data untuk Pagination
+    $where_sql = "1=1";
+    $params = [];
+    if (!empty($search)) {
+        $where_sql .= " AND (m.nama_member LIKE ? OR u.komentar LIKE ? OR u.balasan_admin LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
     }
+
+    $stmt_total = $this->conn->prepare("SELECT COUNT(*) FROM tb_ulasan u LEFT JOIN tb_member m ON u.id_member = m.id_member WHERE $where_sql");
+    $stmt_total->execute($params);
+    $total_data = $stmt_total->fetchColumn();
+    $total_halaman = ceil($total_data / $limit);
+
+    // 3. Ambil Data Ulasan dengan LIMIT & OFFSET
+    $query = "SELECT u.*, m.nama_member 
+              FROM tb_ulasan u 
+              LEFT JOIN tb_member m ON u.id_member = m.id_member 
+              WHERE $where_sql 
+              ORDER BY u.tgl_ulasan DESC 
+              LIMIT $limit OFFSET $offset";
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute($params);
+    $ulasan = $stmt->fetchAll();
+
+    $page = 'ulasan';
+    require_once 'views/admin/header.php';
+    require_once 'views/admin/ulasan.php';
+    require_once 'views/admin/footer.php';
+}
 
     // 2. Balas Ulasan
     public function balas_ulasan()

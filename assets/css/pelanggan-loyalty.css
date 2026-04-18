@@ -1,0 +1,159 @@
+/* ==========================================================
+   HALAMAN RIWAYAT & TUKAR POIN (LOYALTY)
+   ========================================================== */
+.loyalty-container,
+.tukar-container {
+    font-family: "Jost", sans-serif;
+    /* Menyamakan font seluruhnya */
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.loyalty-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #6F4E37;
+    font-weight: 600;
+    transition: 0.3s;
+    padding: 10px 15px;
+    background: #fdfaf8;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.loyalty-back:hover {
+    transform: translateX(-5px);
+    background: #f5ebe6;
+}
+
+.loyalty-h3 {
+    margin: 20px 0 5px 0;
+    color: #333;
+    font-weight: 700;
+}
+
+.loyalty-p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+/* Tabel Riwayat Poin */
+.loyalty-card-table {
+    background: white;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.loyalty-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.loyalty-thead-tr {
+    background: #fdfaf8;
+    border-bottom: 2px solid #eee;
+}
+
+.loyalty-th {
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+}
+
+.loyalty-th-right {
+    padding: 15px;
+    text-align: right;
+    font-size: 14px;
+    color: #666;
+}
+
+.loyalty-tbody-tr {
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.loyalty-td-date {
+    padding: 15px;
+    font-size: 13px;
+    color: #888;
+}
+
+.loyalty-td-desc {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.loyalty-td-points {
+    padding: 15px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.loyalty-td-empty {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* Penyesuaian Tukar Poin (Tetap Identik) */
+.tukar-container {
+    max-width: 1000px;
+}
+
+.tukar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.tukar-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.tukar-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.tukar-points-box {
+    background: #fdfaf8;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-weight: bold;
+    color: #6F4E37;
+}
+
+.btn-tukar-claim {
+    background: #27ae60;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-tukar-disabled {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    color: #999;
+}

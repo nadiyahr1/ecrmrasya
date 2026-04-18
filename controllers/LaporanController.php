@@ -195,8 +195,8 @@ class LaporanController
         $stmt_count->execute([$tgl_mulai, $tgl_selesai]);
         $total_data = $stmt_count->fetch()['total'];
         $total_halaman = ($total_data > 0) ? ceil($total_data / $limit) : 1;
-        
-        $total_pemakaian = $total_data; 
+
+        $total_pemakaian = $total_data;
 
         // 4. Hitung Total Nominal Diskon Secara Keseluruhan
         $query_diskon = "SELECT p.total_transaksi, pr.potongan, pr.tipe_potongan 
@@ -206,7 +206,7 @@ class LaporanController
                          AND DATE(p.tgl_pesanan) BETWEEN ? AND ?";
         $stmt_diskon = $this->conn->prepare($query_diskon);
         $stmt_diskon->execute([$tgl_mulai, $tgl_selesai]);
-        
+
         $total_diskon = 0;
         foreach ($stmt_diskon->fetchAll() as $d) {
             if ($d['tipe_potongan'] == 'Nominal') {
@@ -234,7 +234,7 @@ class LaporanController
                        LIMIT $limit OFFSET $offset";
         $stmtRiwayat = $this->conn->prepare($sqlRiwayat);
         $stmtRiwayat->execute([$tgl_mulai, $tgl_selesai]);
-        
+
         // Memasukkan hasil perhitungan diskon ke dalam array agar bisa dibaca di View
         $riwayat_promo = [];
         foreach ($stmtRiwayat->fetchAll() as $row) {
@@ -262,7 +262,7 @@ class LaporanController
         } else {
             require_once 'views/admin/header.php';
             // Asumsi file ini juga bisa dibuka oleh admin nanti
-            require_once 'views/owner/laporan_promo.php'; 
+            require_once 'views/owner/laporan_promo.php';
             require_once 'views/admin/footer.php';
         }
     }
@@ -273,6 +273,11 @@ class LaporanController
         $type = $_GET['type'] ?? 'penjualan'; // Default ke penjualan
         $tgl_mulai = $_GET['mulai'] ?? date('Y-m-01');
         $tgl_selesai = $_GET['selesai'] ?? date('Y-m-d');
+
+        $stmt_owner = $this->conn->prepare("SELECT nama_user FROM tb_user WHERE role = 'Owner' LIMIT 1");
+        $stmt_owner->execute();
+        $data_owner = $stmt_owner->fetch();
+        $nama_owner = $data_owner ? $data_owner['nama_user'] : '....................';
 
         if ($type == 'member') {
             $judul = "LAPORAN AKTIVITAS MEMBER & POIN";

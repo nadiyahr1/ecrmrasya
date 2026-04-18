@@ -79,12 +79,27 @@
     <button onclick="bukaModalTambah()" style="background: #6F4E37; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">+ Tambah Menu</button>
 </div>
 
-<div style="margin-bottom: 15px;">
-    <form method="GET" action="index.php" style="display: flex; gap: 8px;">
+<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
+    <form method="GET" action="index.php" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <input type="hidden" name="controller" value="admin">
         <input type="hidden" name="action" value="menu">
-        <input type="text" name="search" placeholder="Cari nama menu atau kategori..." value="<?= htmlspecialchars($search) ?>" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-        <button type="submit" style="padding: 8px 15px; background: #6F4E37; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Cari</button>
+        
+        <div style="color: #555; font-size: 14px;">
+            Tampilkan
+            <select name="limit" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; cursor: pointer; margin: 0 5px;">
+                <option value="10" <?= $limit == 10 ? 'selected' : '' ?>>10</option>
+                <option value="20" <?= $limit == 20 ? 'selected' : '' ?>>20</option>
+                <option value="50" <?= $limit == 50 ? 'selected' : '' ?>>50</option>
+            </select> Data
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <input type="text" name="search" placeholder="Cari menu atau kategori..." value="<?= htmlspecialchars($search) ?>" 
+                   style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+            <button type="submit" style="padding: 10px 20px; background: #6F4E37; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                Cari
+            </button>
+        </div>
     </form>
 </div>
 
@@ -168,6 +183,28 @@
                 <button type="button" onclick="tutupModalMenu()" style="flex:1; background:#eee; padding:10px; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Batal</button>
             </div>
         </form>
+    </div>
+</div>
+
+<div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-size: 14px; color: #666;">
+        Menampilkan <?= count($menus) ?> dari <?= $total_data ?> menu
+    </div>
+    <div style="display: flex; gap: 5px;">
+        <?php if ($halaman_aktif > 1): ?>
+            <a href="index.php?controller=admin&action=menu&halaman=<?= $halaman_aktif - 1 ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; background: white; font-size: 14px;">&laquo; Prev</a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
+            <a href="index.php?controller=admin&action=menu&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" 
+               style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
+                <?= $i ?>
+            </a>
+        <?php endfor; ?>
+
+        <?php if ($halaman_aktif < $total_halaman): ?>
+            <a href="index.php?controller=admin&action=menu&halaman=<?= $halaman_aktif + 1 ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; background: white; font-size: 14px;">Next &raquo;</a>
+        <?php endif; ?>
     </div>
 </div>
 

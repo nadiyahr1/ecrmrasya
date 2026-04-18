@@ -110,7 +110,7 @@ class OwnerController
         $page = 'manajemen_admin';
 
         // Ambil data admin saja (bukan Owner)
-        $stmt = $this->conn->query("SELECT * FROM tb_user WHERE role = 'Admin' ORDER BY id_user DESC");
+        $stmt = $this->conn->query("SELECT * FROM tb_user WHERE role = 'Admin' ORDER BY id_user ASC");
         $admins = $stmt->fetchAll();
 
         require_once 'views/owner/header.php';

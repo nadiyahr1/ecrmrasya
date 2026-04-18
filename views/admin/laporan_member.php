@@ -116,7 +116,7 @@
 
 <form action="index.php" method="GET" class="filter-bar">
     <input type="hidden" name="controller" value="laporan">
-    <input type="hidden" name="action" value="member">
+    <input type="hidden" name="action" value="laporanMember">
 
     <div class="filter-group">
         <span>Tampilkan</span>
@@ -203,12 +203,12 @@
 
     <div style="display: flex; gap: 5px;">
         <?php if ($halaman_aktif > 1): ?>
-            <a href="index.php?controller=laporan&action=member&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $halaman_aktif - 1 ?>" class="page-link">Sebelumnya</a>
+            <a href="index.php?controller=laporan&action=laporanMember&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $halaman_aktif - 1 ?>" class="page-link">Sebelumnya</a>
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
             <?php if (abs($halaman_aktif - $i) < 3 || $i == 1 || $i == $total_halaman): ?>
-                <a href="index.php?controller=laporan&action=member&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $i ?>"
+                <a href="index.php?controller=laporan&action=laporanMember&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $i ?>"
                     class="page-link <?= ($halaman_aktif == $i) ? 'active' : '' ?>">
                     <?= $i ?>
                 </a>
@@ -218,7 +218,7 @@
         <?php endfor; ?>
 
         <?php if ($halaman_aktif < $total_halaman): ?>
-            <a href="index.php?controller=laporan&action=member&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $halaman_aktif + 1 ?>" class="page-link">Selanjutnya</a>
+            <a href="index.php?controller=laporan&action=laporanMember&mulai=<?= $tgl_mulai ?>&selesai=<?= $tgl_selesai ?>&limit=<?= $limit ?>&halaman=<?= $halaman_aktif + 1 ?>" class="page-link">Selanjutnya</a>
         <?php endif; ?>
     </div>
 </div>

@@ -284,7 +284,7 @@
             </select> Data
         </div>
         <div style="display: flex; gap: 5px;">
-            <input type="text" name="search" class="search-input" placeholder="🔍 Cari nama atau no. order..." value="<?= htmlspecialchars($search) ?>">
+            <input type="text" name="search" class="search-input" placeholder=" Cari nama atau no. order..." value="<?= htmlspecialchars($search) ?>">
             <button type="submit" class="btn-cari">Cari</button>
         </div>
     </div>
