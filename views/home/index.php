@@ -45,8 +45,11 @@
                 <div class="card menu-item" data-category="<?= htmlspecialchars($m['nama_kategori']) ?>">
                     <div class="menu-image-wrapper">
                         <img src="<?= $base_url ?>assets/gambar/menu/<?= htmlspecialchars($m['foto']) ?>" alt="<?= htmlspecialchars($m['nama_menu']) ?>">
-                        <span class="menu-category-badge"><?= htmlspecialchars($m['nama_kategori']) ?></span>
-                        <span class="menu-status-badge" style="background: <?= $warna_status ?>;"><?= htmlspecialchars($m['status_menu']) ?></span>
+                        <span class="menu-category-badge">
+                            <?= htmlspecialchars($m['nama_kategori']) ?>
+                        </span>
+                        <span class="menu-status-badge" style="background: <?= $warna_status ?>;">
+                            <?= htmlspecialchars($m['status_menu']) ?></span>
                     </div>
 
                     <div class="menu-info">

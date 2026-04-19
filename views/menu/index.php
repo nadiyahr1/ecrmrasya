@@ -21,15 +21,14 @@
                 <div class="menu-card menu-item" data-category="<?= htmlspecialchars($m['nama_kategori']) ?>">
                     <div class="menu-img-wrapper">
                         <img src="<?= $base_url ?>assets/gambar/menu/<?= htmlspecialchars($m['foto']) ?>" class="menu-card-img">
-
                         <span class="badge-category">
                             <?= htmlspecialchars($m['nama_kategori']) ?>
                         </span>
-
                         <span class="badge-status" style="background: <?= $warna_status ?>;">
                             <?= htmlspecialchars($m['status_menu']) ?>
                         </span>
                     </div>
+                    
 
 
                     <div class="menu-card-body">
