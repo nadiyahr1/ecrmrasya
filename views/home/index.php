@@ -19,12 +19,19 @@
         <div class="about-content">
             <h2 class="section-title text-left">About Us</h2>
             <p>
-                Rasya.co adalah tempat terbaik untuk berkumpul dengan keluarga, teman, maupun pasangan. Menyajikan kopi pilihan yang diracik oleh barista profesional dengan suasana cafe yang hangat dan instagramable.
+                <strong>Rasya Coffee & Eatery</strong> hadir sejak 16 Oktober 2025 di Desa Subur, Air Joman, sebagai tempat nongkrong paket lengkap untuk semua kalangan. Kami menggabungkan kelezatan kuliner dengan hiburan seru dalam satu tempat yang nyaman dan estetik.
             </p>
+            <p>
+                Nikmati beragam menu mulai dari kopi, makanan berat, hingga es krim. Untuk melengkapi waktu santai Anda, kami menyediakan fasilitas <strong>Billiard, Karaoke Room, Live Music, hingga Kolam Renang</strong>. Setiap sudut kafe kami desain <em>instagramable</em>, pas untuk Anda yang hobi mengabadikan momen.
+            </p>
+            <p>
+                Kami sangat menghargai kehadiran Anda. Sebagai bentuk apresiasi, mampir lebih sering dan nikmati berbagai keuntungan serta diskon khusus melalui tingkatan <strong>Bronze, Silver, hingga Gold</strong>.
+            </p>
+            <p><strong>Mari buat momen berkesan Anda hanya di Rasya Coffee & Eatery!</strong></p>
         </div>
     </div>
 
-    <div id="our-menu">
+    <div id="our-menu" class="mb-60">
         <h2 class="section-title">Our Menu
             <div class="line-style"></div>
         </h2>
@@ -179,7 +186,11 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <div class="info-text">
                             <h4>Lokasi</h4>
-                            <p>Jl. Contoh No. 123, Kisaran Barat,<br>Sumatera Utara</p>
+                            <p>Jl. Anggrek Dusun 1<br>
+                            Desa Subur<br>
+                            Kecamatan Air Joman<br>
+                            Kabupaten Asahan<br>
+                            Sumatera Utara</p>
                         </div>
                     </div>
 

@@ -110,6 +110,7 @@
     font-weight: bold;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.3;
@@ -274,6 +275,7 @@
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
 }
@@ -939,6 +941,7 @@
     .menu-card-title {
         font-size: 15px;
         -webkit-line-clamp: 1;
+        line-clamp: 2;
         /* Potong jadi 1 baris saja di HP */
     }
 
@@ -1021,6 +1024,7 @@
     .fas-desc {
         font-size: 12px;
         -webkit-line-clamp: 1;
+        line-clamp: 2;
         /* Cuma 1 baris di HP */
     }
 

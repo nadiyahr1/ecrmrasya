@@ -11,7 +11,7 @@
                 </p>
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/rasya.co_coffee.eatery?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-whatsapp"></i></a>
                 </div>
@@ -41,7 +41,7 @@
                 <h4 class="footer-heading">Lokasi Kami</h4>
                 <p class="footer-contact-item mb-10">
                     <i class="fas fa-map-marker-alt footer-icon"></i>
-                    Jl. Contoh No. 123, Kisaran Barat, Sumatera Utara.
+                    Jl. Anggrek, Dusun 1, Desa Subur, Kec. Air Joman, Kab. Asahan, Sumatera Utara
                 </p>
                 <p class="footer-contact-item">
                     <i class="fas fa-envelope footer-icon"></i>
