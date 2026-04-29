@@ -94,7 +94,7 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                     <h3 class="co-section-title"><i class="fa-solid fa-bell-concierge"></i> Tipe Pemesanan</h3>
                     <div class="co-radio-group">
                         <label class="co-radio-card">
-                            <input type="radio" name="tipe_pemesanan" value="Dine-in" id="tipe_dinein" required onchange="toggleMeja()" <?= !empty($data_fasilitas) ? 'checked' : '' ?>>
+                            <input type="radio" name="tipe_pemesanan" value="Makan di Tempat" id="tipe_dinein" required onchange="toggleMeja()" <?= !empty($data_fasilitas) ? 'checked' : '' ?>>
                             <div class="co-radio-content">
                                 <i class="fa-solid fa-store"></i>
                                 <span>Makan di Tempat<br>(Dine In)</span>
@@ -102,7 +102,7 @@ $poin_pelanggan = $_SESSION['poin'] ?? 0;
                         </label>
                         
                         <label class="co-radio-card" style="<?= !empty($data_fasilitas) ? 'display: none;' : '' ?>">
-                            <input type="radio" name="tipe_pemesanan" value="Takeaway" id="tipe_takeaway" onchange="toggleMeja()">
+                            <input type="radio" name="tipe_pemesanan" value="Ambil di Cafe" id="tipe_takeaway" onchange="toggleMeja()">
                             <div class="co-radio-content">
                                 <i class="fa-solid fa-bag-shopping"></i>
                                 <span>Ambil Sendiri<br>(Take Away)</span>

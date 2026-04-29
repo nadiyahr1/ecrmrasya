@@ -147,7 +147,7 @@ class CheckoutController
         $id_pesanan  = "RSY-" . date("YmdHis") . rand(10, 99);
         $tgl_pesanan = date("Y-m-d H:i:s");
 
-        $tipe_pemesanan = $_POST['tipe_pemesanan'] ?? 'Dine-in';
+        $tipe_pemesanan = $_POST['tipe_pemesanan'] ?? 'Makan di Tempat';
         $metode_bayar   = $_POST['metode'] ?? '';
         $catatan        = $_POST['catatan'] ?? '';
 

@@ -326,7 +326,7 @@
                     <td><?= $no++ ?></td>
                     <td style="font-weight: bold; color: #6F4E37;">#<?= $p['id_pesanan'] ?></td>
                     <td><?= $p['nama_member'] ?: '<i>Umum</i>' ?></td>
-                    <td><?= date('d/m/y, H:i', strtotime($p['tgl_pesanan'])) ?></td>
+                    <td><?= date('d/m/y, H:i', strtotime($p['tgl_pesanan'])) ?> WIB</td>
 
                     <td>
                         <?php

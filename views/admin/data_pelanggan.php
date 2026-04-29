@@ -177,7 +177,7 @@
                             <span class="badge-level <?= $badge ?>"><?= $m['nama_level'] ?></span>
                         </td>
                         <td style="font-weight: bold; color: #6F4E37;"><?= number_format($m['poin']) ?> Poin</td>
-                        <td><?= date('d/m/Y', strtotime($m['tgl_daftar'])) ?></td>
+                        <td><?= date('d/m/Y, H:i', strtotime($m['tgl_daftar'])) ?> WIB</td>
                         <!-- <td><?= $m['jml_transaksi'] ?>x</td> -->
                         <!-- <td>Rp <?= number_format($m['total_belanja']) ?></td> -->
                         <td>

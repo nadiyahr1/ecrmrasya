@@ -160,7 +160,7 @@
                         <tr>
                             <td style="font-weight: bold;">#<?= $pm['id_pesanan'] ?></td>
                             <td><?= $pm['nama_member'] ? $pm['nama_member'] : '<i>Umum</i>' ?></td>
-                            <td><?= date('H:i', strtotime($pm['tgl_pesanan'])) ?> WIB</td>
+                            <td><?= date('d/m/y, H:i', strtotime($pm['tgl_pesanan'])) ?> WIB</td>
                             <td style="font-weight: bold;">Rp <?= number_format($pm['total_transaksi'], 0, ',', '.') ?></td>
                             <td>
                                 <a href="index.php?controller=admin&action=data_pesanan&tab=Menunggu Konfirmasi&highlight=<?= $pm['id_pesanan'] ?>#<?= $pm['id_pesanan'] ?>" class="btn-proses-cepat">Proses</a>
