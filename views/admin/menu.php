@@ -22,6 +22,7 @@
         text-align: left;
         font-size: 13px;
         border-bottom: 1px solid #eee;
+        white-space: nowrap;
     }
 
     .table-menu td {
@@ -29,6 +30,7 @@
         border-bottom: 1px solid #eee;
         font-size: 14px;
         vertical-align: middle;
+        white-space: nowrap;
     }
 
     .badge-status {
@@ -83,7 +85,7 @@
     <form method="GET" action="index.php" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <input type="hidden" name="controller" value="admin">
         <input type="hidden" name="action" value="menu">
-        
+
         <div style="color: #555; font-size: 14px;">
             Tampilkan
             <select name="limit" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; cursor: pointer; margin: 0 5px;">
@@ -94,8 +96,8 @@
         </div>
 
         <div style="display: flex; gap: 5px;">
-            <input type="text" name="search" placeholder="Cari menu atau kategori..." value="<?= htmlspecialchars($search) ?>" 
-                   style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+            <input type="text" name="search" placeholder="Cari menu atau kategori..." value="<?= htmlspecialchars($search) ?>"
+                style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
             <button type="submit" style="padding: 10px 20px; background: #6F4E37; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
                 Cari
             </button>
@@ -103,46 +105,48 @@
     </form>
 </div>
 
-<table class="table-menu">
-    <thead>
-        <tr>
-            <th width="30">No</th>
-            <th width="60">Foto</th>
-            <th>Menu</th>
-            <th>Kategori</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            <th>Status</th>
-            <th width="120" style="text-align: center;">Opsi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = $offset + 1;
-        foreach ($menus as $m): ?>
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+    <table class="table-menu">
+        <thead>
             <tr>
-                <td><?= $no++ ?></td>
-                <td><img src="assets/gambar/menu/<?= $m['foto'] ?>" class="img-thumbnail-menu"></td>
-                <td><strong><?= $m['nama_menu'] ?></strong></td>
-                <td><?= $m['nama_kategori'] ?></td>
-                <td style="font-weight: bold;">Rp <?= number_format($m['harga']) ?></td>
-                <td><?= $m['stok'] ?></td>
-                <td>
-                    <?php
-                    // Logika otomatis: Paksa jadi Habis jika stok 0
-                    $status_nyata = ($m['stok'] <= 0) ? 'Habis' : $m['status_menu'];
-                    ?>
-                    <span class="badge-status status-<?= $status_nyata ?>">
-                        <?= $status_nyata ?>
-                    </span>
-                </td>
-                <td style="text-align: center;">
-                    <button type="button" class="btn-action btn-edit" onclick="bukaModalEdit('<?= $m['id_menu'] ?>', '<?= addslashes(htmlspecialchars($m['nama_menu'])) ?>', '<?= $m['id_kategori'] ?>', '<?= $m['harga'] ?>', '<?= $m['stok'] ?>', '<?= $m['foto'] ?>')">Edit</button>
-                    <a href="index.php?controller=admin&action=hapus_menu&id=<?= $m['id_menu'] ?>" class="btn-action btn-delete" onclick="return confirm('Hapus menu ini beserta fotonya?')">Hapus</a>
-                </td>
+                <th width="30">No</th>
+                <th width="60">Foto</th>
+                <th>Menu</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Status</th>
+                <th width="120" style="text-align: center;">Opsi</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php $no = $offset + 1;
+            foreach ($menus as $m): ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><img src="assets/gambar/menu/<?= $m['foto'] ?>" class="img-thumbnail-menu"></td>
+                    <td><strong><?= $m['nama_menu'] ?></strong></td>
+                    <td><?= $m['nama_kategori'] ?></td>
+                    <td style="font-weight: bold;">Rp <?= number_format($m['harga']) ?></td>
+                    <td><?= $m['stok'] ?></td>
+                    <td>
+                        <?php
+                        // Logika otomatis: Paksa jadi Habis jika stok 0
+                        $status_nyata = ($m['stok'] <= 0) ? 'Habis' : $m['status_menu'];
+                        ?>
+                        <span class="badge-status status-<?= $status_nyata ?>">
+                            <?= $status_nyata ?>
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <button type="button" class="btn-action btn-edit" onclick="bukaModalEdit('<?= $m['id_menu'] ?>', '<?= addslashes(htmlspecialchars($m['nama_menu'])) ?>', '<?= $m['id_kategori'] ?>', '<?= $m['harga'] ?>', '<?= $m['stok'] ?>', '<?= $m['foto'] ?>')">Edit</button>
+                        <a href="index.php?controller=admin&action=hapus_menu&id=<?= $m['id_menu'] ?>" class="btn-action btn-delete" onclick="return confirm('Hapus menu ini beserta fotonya?')">Hapus</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
 <div id="modalMenu" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
     <div style="background:white; padding:25px; border-radius:12px; width:500px; box-shadow:0 5px 20px rgba(0,0,0,0.3);">
@@ -196,8 +200,8 @@
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
-            <a href="index.php?controller=admin&action=menu&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" 
-               style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
+            <a href="index.php?controller=admin&action=menu&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>"
+                style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
                 <?= $i ?>
             </a>
         <?php endfor; ?>

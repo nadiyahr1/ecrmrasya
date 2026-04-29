@@ -1,8 +1,8 @@
 <style>
     .img-fasilitas { width: 80px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
     .table-fasilitas { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
-    .table-fasilitas th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; border-bottom: 1px solid #eee; }
-    .table-fasilitas td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 14px; }
+    .table-fasilitas th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; border-bottom: 1px solid #eee; white-space: nowrap; }
+    .table-fasilitas td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 14px; white-space: nowrap; }
     .btn-action { padding: 5px 10px; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: bold; cursor: pointer; border: none; }
     .btn-edit { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
     .btn-delete { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
@@ -37,6 +37,7 @@
     </form>
 </div>
 
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
 <table class="table-fasilitas">
     <thead>
         <tr>
@@ -77,6 +78,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+                    </div>
 
 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
     <div style="font-size: 14px; color: #666;">

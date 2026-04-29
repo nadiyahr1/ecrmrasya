@@ -39,6 +39,7 @@
         font-size: 13px;
         color: #555;
         border-bottom: 1px solid #eee;
+        white-space: nowrap;
     }
 
     .table-pesanan td {
@@ -47,6 +48,7 @@
         border-bottom: 1px solid #eee;
         color: #333;
         vertical-align: middle;
+        white-space: nowrap;
     }
 
     /* 1. Efek Hover untuk baris tabel */
@@ -63,9 +65,21 @@
     }
 
     @keyframes kilatKuning {
-        0% { background-color: #fef08a; } /* Kuning cerah */
-        70% { background-color: #fef08a; } /* Tahan warna kuningnya sebentar */
-        100% { background-color: transparent; } /* Kembali normal */
+        0% {
+            background-color: #fef08a;
+        }
+
+        /* Kuning cerah */
+        70% {
+            background-color: #fef08a;
+        }
+
+        /* Tahan warna kuningnya sebentar */
+        100% {
+            background-color: transparent;
+        }
+
+        /* Kembali normal */
     }
 
     .badge {
@@ -75,6 +89,7 @@
         font-weight: bold;
         display: inline-block;
         text-align: center;
+        white-space: nowrap;
     }
 
     .badge-menunggu {
@@ -290,94 +305,96 @@
     </div>
 </form>
 
-<table class="table-pesanan">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>No. Order</th>
-            <th>Nama Pelanggan</th>
-            <th>Tanggal Order</th>
-            <th>Tipe Pemesanan</th>
-            <th>Total Transaksi</th>
-            <th>Status</th>
-            <th>Opsi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = $offset + 1;
-        foreach ($pesanan as $p): ?>
-            <tr id="<?= $p['id_pesanan'] ?>" class="<?= (isset($_GET['highlight']) && $_GET['highlight'] == $p['id_pesanan']) ? 'highlight-aktif' : '' ?> table-hover">
-                <td><?= $no++ ?></td>
-                <td style="font-weight: bold; color: #6F4E37;">#<?= $p['id_pesanan'] ?></td>
-                <td><?= $p['nama_member'] ?: '<i>Umum</i>' ?></td>
-                <td><?= date('d/m/y, H:i', strtotime($p['tgl_pesanan'])) ?></td>
-
-                <td>
-                    <?php
-                    if (!empty($p['tipe_pemesanan'])) {
-                        echo $p['tipe_pemesanan'];
-                        if ($p['tipe_pemesanan'] == 'Makan di Tempat' && !empty($p['no_meja'])) {
-                            echo "<br><small style='color: #6F4E37; font-weight: bold; font-size: 12px;'>(Meja " . $p['no_meja'] . ")</small>";
-                        }
-                    } else {
-                        echo '<span style="color:red;">(Kosong)</span>';
-                    }
-                    ?>
-                </td>
-
-                <td style="font-weight: bold;">Rp <?= number_format($p['total_transaksi'], 0, ',', '.') ?></td>
-                <td>
-                    <?php
-                    $st = trim($p['status']);
-                    // Tambahkan baris khusus Belum Bayar di sini:
-                    if ($st == 'Belum Bayar') echo '<span class="badge" style="background:#fee2e2; color:#b91c1c;">Belum Bayar</span>';
-                    elseif ($st == 'Menunggu Konfirmasi' || $st == '') echo '<span class="badge badge-menunggu">Menunggu Konfirmasi</span>';
-                    elseif ($st == 'Konfirmasi') echo '<span class="badge badge-konfirmasi">Konfirmasi</span>';
-                    elseif ($st == 'Sedang Diproses') echo '<span class="badge badge-diproses">Sedang Diproses</span>';
-                    elseif ($st == 'Pesanan Siap') echo '<span class="badge badge-siap">Pesanan Siap</span>';
-                    elseif ($st == 'Selesai') echo '<span class="badge badge-selesai">Selesai</span>';
-                    elseif ($st == 'Dibatalkan') echo '<span class="badge badge-batal">Dibatalkan</span>';
-                    else echo '<span class="badge" style="background:#eee; color:#333;">' . $st . '</span>';
-                    ?>
-                </td>
-                <td style="display: flex; gap: 8px; align-items: center;">
-                    <button type="button" onclick="bukaDetail('<?= $p['id_pesanan'] ?>')" style="background:#f1f5f9; border: 1px solid #cbd5e1; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; color:#475569; cursor:pointer;">Detail</button>
-
-                    <?php if ($st != 'Selesai' && $st != 'Dibatalkan'): ?>
-                        <form action="index.php?controller=admin&action=data_pesanan" method="POST" style="margin: 0;">
-                            <input type="hidden" name="id_pesanan" value="<?= $p['id_pesanan'] ?>">
-                            <input type="hidden" name="update_status" value="1">
-
-                            <?php
-                            // PROTEKSI ADMIN: Kunci dropdown jika metode Transfer tapi belum dibayar ke Midtrans
-                            $is_locked = ($p['metode_pembayaran'] == 'Transfer' && $st == 'Belum Bayar') ? 'disabled title="Menunggu pembayaran pelanggan via sistem"' : '';
-                            ?>
-
-                            <select name="status_baru" class="select-status" onchange="this.form.submit()" <?= $is_locked ?>>
-                                <option value="" disabled selected>Update Status ▾</option>
-                                <?php if ($st == 'Menunggu Konfirmasi' || $st == '' || $st == 'Belum Bayar'): ?>
-                                    <option value="Konfirmasi">Konfirmasi</option>
-                                    <option value="Dibatalkan">Batalkan</option>
-                                <?php elseif ($st == 'Konfirmasi'): ?>
-                                    <option value="Sedang Diproses">Sedang Diproses</option>
-                                <?php elseif ($st == 'Sedang Diproses'): ?>
-                                    <option value="Pesanan Siap">Pesanan Siap</option>
-                                <?php elseif ($st == 'Pesanan Siap'): ?>
-                                    <option value="Selesai">Selesai</option>
-                                <?php endif; ?>
-                            </select>
-                        </form>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <?php if (count($pesanan) == 0): ?>
+<div style="overflow-x: auto; width: 100%; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <table class="table-pesanan">
+        <thead>
             <tr>
-                <td colspan="8" style="text-align: center; color: #888; padding: 30px;">Tidak ada data pesanan yang ditemukan.</td>
+                <th>No</th>
+                <th>No. Order</th>
+                <th>Nama Pelanggan</th>
+                <th>Tanggal Order</th>
+                <th>Tipe Pemesanan</th>
+                <th>Total Transaksi</th>
+                <th>Status</th>
+                <th>Opsi</th>
             </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php $no = $offset + 1;
+            foreach ($pesanan as $p): ?>
+                <tr id="<?= $p['id_pesanan'] ?>" class="<?= (isset($_GET['highlight']) && $_GET['highlight'] == $p['id_pesanan']) ? 'highlight-aktif' : '' ?> table-hover">
+                    <td><?= $no++ ?></td>
+                    <td style="font-weight: bold; color: #6F4E37;">#<?= $p['id_pesanan'] ?></td>
+                    <td><?= $p['nama_member'] ?: '<i>Umum</i>' ?></td>
+                    <td><?= date('d/m/y, H:i', strtotime($p['tgl_pesanan'])) ?></td>
+
+                    <td>
+                        <?php
+                        if (!empty($p['tipe_pemesanan'])) {
+                            echo $p['tipe_pemesanan'];
+                            if ($p['tipe_pemesanan'] == 'Makan di Tempat' && !empty($p['no_meja'])) {
+                                echo "<br><small style='color: #6F4E37; font-weight: bold; font-size: 12px;'>(Meja " . $p['no_meja'] . ")</small>";
+                            }
+                        } else {
+                            echo '<span style="color:red;">(Kosong)</span>';
+                        }
+                        ?>
+                    </td>
+
+                    <td style="font-weight: bold;">Rp <?= number_format($p['total_transaksi'], 0, ',', '.') ?></td>
+                    <td>
+                        <?php
+                        $st = trim($p['status']);
+                        // Tambahkan baris khusus Belum Bayar di sini:
+                        if ($st == 'Belum Bayar') echo '<span class="badge" style="background:#fee2e2; color:#b91c1c;">Belum Bayar</span>';
+                        elseif ($st == 'Menunggu Konfirmasi' || $st == '') echo '<span class="badge badge-menunggu">Menunggu Konfirmasi</span>';
+                        elseif ($st == 'Konfirmasi') echo '<span class="badge badge-konfirmasi">Konfirmasi</span>';
+                        elseif ($st == 'Sedang Diproses') echo '<span class="badge badge-diproses">Sedang Diproses</span>';
+                        elseif ($st == 'Pesanan Siap') echo '<span class="badge badge-siap">Pesanan Siap</span>';
+                        elseif ($st == 'Selesai') echo '<span class="badge badge-selesai">Selesai</span>';
+                        elseif ($st == 'Dibatalkan') echo '<span class="badge badge-batal">Dibatalkan</span>';
+                        else echo '<span class="badge" style="background:#eee; color:#333;">' . $st . '</span>';
+                        ?>
+                    </td>
+                    <td style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" onclick="bukaDetail('<?= $p['id_pesanan'] ?>')" style="background:#f1f5f9; border: 1px solid #cbd5e1; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:bold; color:#475569; cursor:pointer;">Detail</button>
+
+                        <?php if ($st != 'Selesai' && $st != 'Dibatalkan'): ?>
+                            <form action="index.php?controller=admin&action=data_pesanan" method="POST" style="margin: 0;">
+                                <input type="hidden" name="id_pesanan" value="<?= $p['id_pesanan'] ?>">
+                                <input type="hidden" name="update_status" value="1">
+
+                                <?php
+                                // PROTEKSI ADMIN: Kunci dropdown jika metode Transfer tapi belum dibayar ke Midtrans
+                                $is_locked = ($p['metode_pembayaran'] == 'Transfer' && $st == 'Belum Bayar') ? 'disabled title="Menunggu pembayaran pelanggan via sistem"' : '';
+                                ?>
+
+                                <select name="status_baru" class="select-status" onchange="this.form.submit()" <?= $is_locked ?>>
+                                    <option value="" disabled selected>Update Status</option>
+                                    <?php if ($st == 'Menunggu Konfirmasi' || $st == '' || $st == 'Belum Bayar'): ?>
+                                        <option value="Konfirmasi">Konfirmasi</option>
+                                        <option value="Dibatalkan">Batalkan</option>
+                                    <?php elseif ($st == 'Konfirmasi'): ?>
+                                        <option value="Sedang Diproses">Sedang Diproses</option>
+                                    <?php elseif ($st == 'Sedang Diproses'): ?>
+                                        <option value="Pesanan Siap">Pesanan Siap</option>
+                                    <?php elseif ($st == 'Pesanan Siap'): ?>
+                                        <option value="Selesai">Selesai</option>
+                                    <?php endif; ?>
+                                </select>
+                            </form>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (count($pesanan) == 0): ?>
+                <tr>
+                    <td colspan="8" style="text-align: center; color: #888; padding: 30px;">Tidak ada data pesanan yang ditemukan.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
 <?php if ($total_halaman > 1): ?>
     <div class="pagination-container">
@@ -426,7 +443,10 @@
 
                 // Geser layar ke baris tersebut
                 setTimeout(() => {
-                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    row.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
                 }, 100);
 
                 // Bersihkan URL setelah 3 detik

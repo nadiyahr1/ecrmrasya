@@ -111,6 +111,7 @@
         font-size: 13px;
         color: #555;
         border-bottom: 2px solid #eee;
+        white-space: nowrap;
     }
 
     .table-laporan td {
@@ -119,6 +120,7 @@
         font-size: 14px;
         vertical-align: middle;
         color: #333;
+        white-space: nowrap;
     }
 
     .table-laporan tr:hover {
@@ -210,56 +212,58 @@
             <div class="stat-number">Rp <?= number_format($total_diskon ?? 0, 0, ',', '.') ?></div>
         </div>
     </div>
+    <div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
 
-    <table class="table-laporan">
-        <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th width="15%">Tanggal Transaksi</th>
-                <th width="18%">Nama Pelanggan</th>
-                <th width="20%">Nama Promo</th>
-                <th width="12%">Tipe Promo</th>
-                <th width="15%">Diskon Diberikan</th>
-                <th width="20%">Total Belanja (Akhir)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($riwayat_promo)): ?>
-                <?php
-                $no = $offset + 1;
-                foreach ($riwayat_promo as $baris):
-                ?>
+        <table class="table-laporan">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="15%">Tanggal Transaksi</th>
+                    <th width="18%">Nama Pelanggan</th>
+                    <th width="20%">Nama Promo</th>
+                    <th width="12%">Tipe Promo</th>
+                    <th width="15%">Diskon Diberikan</th>
+                    <th width="20%">Total Belanja (Akhir)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($riwayat_promo)): ?>
+                    <?php
+                    $no = $offset + 1;
+                    foreach ($riwayat_promo as $baris):
+                    ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= date('d M Y, H:i', strtotime($baris['tgl_pesanan'])) ?></td>
+                            <td style="font-weight: 600;"><?= htmlspecialchars($baris['nama_member'] ?? 'Non-Member') ?></td>
+                            <td><span class="badge-promo"><?= htmlspecialchars($baris['nama_promo']) ?></span></td>
+                            <td>
+                                <?php if ($baris['tipe_promo'] == 'Umum'): ?>
+                                    <span class="badge-tipe-umum">Umum</span>
+                                <?php elseif ($baris['tipe_promo'] == 'Level'): ?>
+                                    <span class="badge-tipe-level">Level</span>
+                                <?php else: ?>
+                                    <span class="badge-tipe-poin">Tukar Poin</span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="font-weight: bold; color: #d97706;">
+                                Rp <?= number_format($baris['nominal_diskon'], 0, ',', '.') ?>
+                            </td>
+                            <td style="font-weight: bold; color: #16a34a;">
+                                Rp <?= number_format($baris['total_transaksi'], 0, ',', '.') ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= date('d M Y, H:i', strtotime($baris['tgl_pesanan'])) ?></td>
-                        <td style="font-weight: 600;"><?= htmlspecialchars($baris['nama_member'] ?? 'Non-Member') ?></td>
-                        <td><span class="badge-promo"><?= htmlspecialchars($baris['nama_promo']) ?></span></td>
-                        <td>
-                            <?php if ($baris['tipe_promo'] == 'Umum'): ?>
-                                <span class="badge-tipe-umum">Umum</span>
-                            <?php elseif ($baris['tipe_promo'] == 'Level'): ?>
-                                <span class="badge-tipe-level">Level</span>
-                            <?php else: ?>
-                                <span class="badge-tipe-poin">Tukar Poin</span>
-                            <?php endif; ?>
-                        </td>
-                        <td style="font-weight: bold; color: #d97706;">
-                            Rp <?= number_format($baris['nominal_diskon'], 0, ',', '.') ?>
-                        </td>
-                        <td style="font-weight: bold; color: #16a34a;">
-                            Rp <?= number_format($baris['total_transaksi'], 0, ',', '.') ?>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
+                            Tidak ada transaksi yang menggunakan promo pada rentang tanggal ini.
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
-                        Tidak ada transaksi yang menggunakan promo pada rentang tanggal ini.
-                    </td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
     <div class="pagination-bar">
         <div>

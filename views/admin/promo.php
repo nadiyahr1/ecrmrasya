@@ -44,6 +44,7 @@
         text-align: left;
         font-size: 13px;
         border-bottom: 1px solid #eee;
+        white-space: nowrap;
     }
 
     .table-promo td {
@@ -51,6 +52,7 @@
         border-bottom: 1px solid #eee;
         font-size: 14px;
         vertical-align: middle;
+        white-space: nowrap;
     }
 
     .btn-action {
@@ -85,7 +87,7 @@
     <form method="GET" action="index.php" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <input type="hidden" name="controller" value="admin">
         <input type="hidden" name="action" value="promo">
-        
+
         <div style="color: #555; font-size: 14px;">
             Tampilkan
             <select name="limit" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; cursor: pointer; margin: 0 5px;">
@@ -96,8 +98,8 @@
         </div>
 
         <div style="display: flex; gap: 5px;">
-            <input type="text" name="search" placeholder="Cari kode atau promo..." value="<?= htmlspecialchars($search ?? '') ?>" 
-                   style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+            <input type="text" name="search" placeholder="Cari kode atau promo..." value="<?= htmlspecialchars($search ?? '') ?>"
+                style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
             <button type="submit" style="padding: 10px 20px; background: #6F4E37; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
                 Cari
             </button>
@@ -105,56 +107,57 @@
     </form>
 </div>
 
-<table class="table-promo">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Flyer</th>
-            <th>Info Promo</th>
-            <th>Kategori & Kuota</th>
-            <th>Potongan</th>
-            <th>Masa Berlaku</th>
-            <th>Status</th>
-            <th style="text-align: center;">Opsi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = 1;
-        foreach ($promos as $p): ?>
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+    <table class="table-promo">
+        <thead>
             <tr>
-                <td><?= $no++ ?></td>
-                <td><img src="assets/gambar/promo/<?= htmlspecialchars($p['foto_promo']) ?>" class="img-promo"></td>
-                <td>
-                    <strong><?= htmlspecialchars($p['nama_promo']) ?></strong><br>
-                    <small style="color:#888;">Kode: <?= $p['kode_promo'] ?: '-' ?></small>
-                </td>
-                <td>
-                    <span class="badge-tipe tipe-<?= $p['tipe_promo'] ?>"><?= str_replace('_', ' ', $p['tipe_promo']) ?></span><br>
-                    <?php if ($p['tipe_promo'] == 'Level'): ?>
-                        <small style="color: #6F4E37;">Target: <?= $p['nama_level'] ?></small><br>
-                    <?php elseif ($p['tipe_promo'] == 'Tukar_Poin'): ?>
-                        <small style="color: #6F4E37;">Biaya: <?= $p['min_poin'] ?> Poin</small><br>
-                    <?php endif; ?>
-                    <small style="color:#666;">Kuota: <?= $p['kuota'] ?: 'Tanpa Batas' ?></small>
-                </td>
-                <td>
-                    <?php
-                    if ($p['tipe_potongan'] == 'Persen') echo $p['potongan'] . '%';
-                    elseif ($p['tipe_potongan'] == 'Nominal') echo 'Rp ' . number_format($p['potongan']);
-                    else echo 'Free Item';
-                    ?>
-                </td>
-                <td style="font-size: 12px;">
-                    <?= date('d/m/y', strtotime($p['tgl_mulai'])) ?> - <?= date('d/m/y', strtotime($p['tgl_selesai'])) ?>
-                </td>
-                <td>
-                    <span style="color: <?= ($p['status_promo'] == 'Aktif') ? '#059669' : '#dc2626' ?>; font-weight: bold;">
-                        <?= $p['status_promo'] ?>
-                    </span>
-                </td>
-                <td style="text-align: center;">
-                    <button type="button" class="btn-action btn-edit"
-                        onclick="editPromo(
+                <th>No</th>
+                <th>Flyer</th>
+                <th>Info Promo</th>
+                <th>Kategori & Kuota</th>
+                <th>Potongan</th>
+                <th>Masa Berlaku</th>
+                <th>Status</th>
+                <th style="text-align: center;">Opsi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $no = 1;
+            foreach ($promos as $p): ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><img src="assets/gambar/promo/<?= htmlspecialchars($p['foto_promo']) ?>" class="img-promo"></td>
+                    <td>
+                        <strong><?= htmlspecialchars($p['nama_promo']) ?></strong><br>
+                        <small style="color:#888;">Kode: <?= $p['kode_promo'] ?: '-' ?></small>
+                    </td>
+                    <td>
+                        <span class="badge-tipe tipe-<?= $p['tipe_promo'] ?>"><?= str_replace('_', ' ', $p['tipe_promo']) ?></span><br>
+                        <?php if ($p['tipe_promo'] == 'Level'): ?>
+                            <small style="color: #6F4E37;">Target: <?= $p['nama_level'] ?></small><br>
+                        <?php elseif ($p['tipe_promo'] == 'Tukar_Poin'): ?>
+                            <small style="color: #6F4E37;">Biaya: <?= $p['min_poin'] ?> Poin</small><br>
+                        <?php endif; ?>
+                        <small style="color:#666;">Kuota: <?= $p['kuota'] ?: 'Tanpa Batas' ?></small>
+                    </td>
+                    <td>
+                        <?php
+                        if ($p['tipe_potongan'] == 'Persen') echo $p['potongan'] . '%';
+                        elseif ($p['tipe_potongan'] == 'Nominal') echo 'Rp ' . number_format($p['potongan']);
+                        else echo 'Free Item';
+                        ?>
+                    </td>
+                    <td style="font-size: 12px;">
+                        <?= date('d/m/y', strtotime($p['tgl_mulai'])) ?> - <?= date('d/m/y', strtotime($p['tgl_selesai'])) ?>
+                    </td>
+                    <td>
+                        <span style="color: <?= ($p['status_promo'] == 'Aktif') ? '#059669' : '#dc2626' ?>; font-weight: bold;">
+                            <?= $p['status_promo'] ?>
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <button type="button" class="btn-action btn-edit"
+                            onclick="editPromo(
                            '<?= $p['id_promo'] ?>', 
                            '<?= addslashes(htmlspecialchars($p['nama_promo'])) ?>', 
                            '<?= htmlspecialchars($p['kode_promo']) ?>', 
@@ -175,12 +178,13 @@
                            '<?= $p['id_menu_bonus'] ?? '' ?>',
                            '<?= $p['min_beli'] ?? '1' ?>'
                         )">Edit</button>
-                    <a href="index.php?controller=admin&action=hapus_promo&id=<?= $p['id_promo'] ?>" class="btn-action btn-delete" onclick="return confirm('Hapus promo ini?')">Hapus</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+                        <a href="index.php?controller=admin&action=hapus_promo&id=<?= $p['id_promo'] ?>" class="btn-action btn-delete" onclick="return confirm('Hapus promo ini?')">Hapus</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
     <div style="font-size: 14px; color: #666;">
@@ -192,8 +196,8 @@
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
-            <a href="index.php?controller=admin&action=promo&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" 
-               style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
+            <a href="index.php?controller=admin&action=promo&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>"
+                style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
                 <?= $i ?>
             </a>
         <?php endfor; ?>

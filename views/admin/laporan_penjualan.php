@@ -16,6 +16,7 @@
         font-size: 13px;
         color: #555;
         border-bottom: 2px solid #eee;
+        white-space: nowrap;
     }
 
     .table-laporan td {
@@ -24,6 +25,7 @@
         font-size: 14px;
         vertical-align: middle;
         color: #333;
+        white-space: nowrap;
     }
 
     .table-laporan tr:hover {
@@ -40,6 +42,8 @@
         padding: 15px 20px;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     .filter-group {
@@ -151,61 +155,63 @@
     </div>
 </form>
 
-<table class="table-laporan">
-    <thead>
-        <tr>
-            <th width="5%">No</th>
-            <th width="18%">Tanggal</th>
-            <th width="15%">ID Pesanan</th>
-            <th width="25%">Nama Pelanggan</th>
-            <th width="15%">Metode Bayar</th>
-            <th width="22%" style="text-align: right;">Nominal (Rp)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (empty($laporan)): ?>
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+    <table class="table-laporan">
+        <thead>
             <tr>
-                <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
-                    Tidak ada data transaksi selesai pada rentang tanggal ini.
-                </td>
+                <th width="5%">No</th>
+                <th width="18%">Tanggal</th>
+                <th width="15%">ID Pesanan</th>
+                <th width="25%">Nama Pelanggan</th>
+                <th width="15%">Metode Bayar</th>
+                <th width="22%" style="text-align: right;">Nominal (Rp)</th>
             </tr>
-        <?php else: ?>
-            <?php
-            $no = $offset + 1;
-            foreach ($laporan as $row):
-            ?>
+        </thead>
+        <tbody>
+            <?php if (empty($laporan)): ?>
                 <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= date('d M Y, H:i', strtotime($row['tgl_pesanan'])) ?></td>
-                    <td><strong>#<?= $row['id_pesanan'] ?></strong></td>
-                    <td><?= htmlspecialchars($row['nama_member'] ?? 'Pelanggan Umum') ?></td>
-                    <td>
-                        <span style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: #475569;">
-                            <?php
-                            $metode_laporan = $row['metode_pembayaran'];
-                            if (strpos($metode_laporan, ' - VA: ') !== false) {
-                                $parts_lap = explode(' - VA: ', $metode_laporan);
-                                echo htmlspecialchars($parts_lap[0]);
-                            } else {
-                                echo htmlspecialchars($metode_laporan);
-                            }
-                            ?>
-                        </span>
-                    </td>
-                    <td style="text-align: right; font-weight: bold; color: #16a34a;">
-                        <?= number_format($row['total_transaksi']) ?>
+                    <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
+                        Tidak ada data transaksi selesai pada rentang tanggal ini.
                     </td>
                 </tr>
-            <?php endforeach; ?>
-            <tr style="background: #fefce8;">
-                <td colspan="5" style="text-align: right; font-weight: bold; padding: 15px; font-size: 15px;">TOTAL KESELURUHAN (PERIODE INI) :</td>
-                <td style="text-align: right; font-weight: bold; padding: 15px; font-size: 16px; color: #b91c1c;">
-                    Rp <?= number_format($total_omzet) ?>
-                </td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+            <?php else: ?>
+                <?php
+                $no = $offset + 1;
+                foreach ($laporan as $row):
+                ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= date('d M Y, H:i', strtotime($row['tgl_pesanan'])) ?></td>
+                        <td><strong>#<?= $row['id_pesanan'] ?></strong></td>
+                        <td><?= htmlspecialchars($row['nama_member'] ?? 'Pelanggan Umum') ?></td>
+                        <td>
+                            <span style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: #475569;">
+                                <?php
+                                $metode_laporan = $row['metode_pembayaran'];
+                                if (strpos($metode_laporan, ' - VA: ') !== false) {
+                                    $parts_lap = explode(' - VA: ', $metode_laporan);
+                                    echo htmlspecialchars($parts_lap[0]);
+                                } else {
+                                    echo htmlspecialchars($metode_laporan);
+                                }
+                                ?>
+                            </span>
+                        </td>
+                        <td style="text-align: right; font-weight: bold; color: #16a34a;">
+                            <?= number_format($row['total_transaksi']) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr style="background: #fefce8;">
+                    <td colspan="5" style="text-align: right; font-weight: bold; padding: 15px; font-size: 15px;">TOTAL KESELURUHAN (PERIODE INI) :</td>
+                    <td style="text-align: right; font-weight: bold; padding: 15px; font-size: 16px; color: #b91c1c;">
+                        Rp <?= number_format($total_omzet) ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
 <div class="pagination-bar">
     <div>

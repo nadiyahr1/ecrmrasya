@@ -111,6 +111,7 @@
         font-size: 13px;
         color: #555;
         border-bottom: 2px solid #eee;
+        white-space: nowrap;
     }
 
     .table-laporan td {
@@ -119,6 +120,7 @@
         font-size: 14px;
         vertical-align: middle;
         color: #333;
+        white-space: nowrap;
     }
 
     .table-laporan tr:hover {
@@ -223,51 +225,53 @@
         </div>
     </form>
 
-    <table class="table-laporan">
-        <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th width="20%">Waktu Perubahan</th>
-                <th width="25%">Nama Pelanggan</th>
-                <th width="15%">Jumlah Poin</th>
-                <th width="10%">Tipe</th>
-                <th width="25%">Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($riwayat_poin)): ?>
-                <?php
-                $no = $offset + 1;
-                foreach ($riwayat_poin as $baris):
-                ?>
-                    <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= date('d M Y, H:i', strtotime($baris['tgl_perubahan'])) ?></td>
-                        <td style="font-weight: 600;"><?= htmlspecialchars($baris['nama_member']) ?></td>
-                        <td style="font-weight: bold; font-size: 15px;">
-                            <span style="color: <?= ($baris['tipe'] == 'Masuk') ? '#16a34a' : '#d97706' ?>;">
-                                <?= ($baris['tipe'] == 'Masuk' ? '+' : '-') . number_format($baris['poin']) ?>
-                            </span>
-                        </td>
-                        <td>
-                            <?php if ($baris['tipe'] == 'Masuk'): ?>
-                                <span class="badge-masuk">Masuk</span>
-                            <?php else: ?>
-                                <span class="badge-keluar">Keluar</span>
-                            <?php endif; ?>
-                        </td>
-                        <td style="color: #666; font-size: 13px;"><?= htmlspecialchars($baris['keterangan']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+        <table class="table-laporan">
+            <thead>
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
-                        Tidak ada riwayat pergerakan poin pada rentang tanggal ini.
-                    </td>
+                    <th width="5%">No</th>
+                    <th width="20%">Waktu Perubahan</th>
+                    <th width="25%">Nama Pelanggan</th>
+                    <th width="15%">Jumlah Poin</th>
+                    <th width="10%">Tipe</th>
+                    <th width="25%">Keterangan</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($riwayat_poin)): ?>
+                    <?php
+                    $no = $offset + 1;
+                    foreach ($riwayat_poin as $baris):
+                    ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= date('d M Y, H:i', strtotime($baris['tgl_perubahan'])) ?></td>
+                            <td style="font-weight: 600;"><?= htmlspecialchars($baris['nama_member']) ?></td>
+                            <td style="font-weight: bold; font-size: 15px;">
+                                <span style="color: <?= ($baris['tipe'] == 'Masuk') ? '#16a34a' : '#d97706' ?>;">
+                                    <?= ($baris['tipe'] == 'Masuk' ? '+' : '-') . number_format($baris['poin']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if ($baris['tipe'] == 'Masuk'): ?>
+                                    <span class="badge-masuk">Masuk</span>
+                                <?php else: ?>
+                                    <span class="badge-keluar">Keluar</span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="color: #666; font-size: 13px;"><?= htmlspecialchars($baris['keterangan']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: #888;">
+                            Tidak ada riwayat pergerakan poin pada rentang tanggal ini.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
     <div class="pagination-bar">
         <div>

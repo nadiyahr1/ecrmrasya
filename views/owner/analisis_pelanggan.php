@@ -40,6 +40,7 @@
         gap: 20px;
         margin-bottom: 40px;
         width: 100%;
+        white-space: nowrap;
     }
 
     .table-panel {
@@ -133,85 +134,87 @@
     <?php endif; ?>
 </div>
 
-<div class="grid-tables">
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+    <div class="grid-tables">
 
-    <div class="table-panel">
-        <div class="table-panel-title">
-            <span>🏆 Peringkat 10 Pelanggan Loyal</span>
-        </div>
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Pelanggan</th>
-                    <th>Kunjungan</th>
-                    <th>Total Belanja</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($top_customers)): ?>
-                    <?php $no = 1;
-                    foreach ($top_customers as $top): ?>
-                        <tr>
-                            <td style="font-weight: bold; color: #6F4E37;"><?= $no++ ?></td>
-                            <td>
-                                <div style="font-weight: 600;"><?= htmlspecialchars($top['nama_member']) ?></div>
-                                <span class="badge-level"><?= htmlspecialchars($top['nama_level'] ?? 'Member') ?></span>
-                            </td>
-                            <td><?= number_format($top['jumlah_kunjungan']) ?>x</td>
-                            <td style="font-weight: bold; color: #10b981;">Rp <?= number_format($top['total_belanja'], 0, ',', '.') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
+        <div class="table-panel">
+            <div class="table-panel-title">
+                <span>🏆 Peringkat 10 Pelanggan Loyal</span>
+            </div>
+            <table class="table-custom">
+                <thead>
                     <tr>
-                        <td colspan="4" style="text-align: center; padding: 20px; color: #888;">Belum ada data transaksi pelanggan.</td>
+                        <th>No</th>
+                        <th>Nama Pelanggan</th>
+                        <th>Kunjungan</th>
+                        <th>Total Belanja</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php if (!empty($top_customers)): ?>
+                        <?php $no = 1;
+                        foreach ($top_customers as $top): ?>
+                            <tr>
+                                <td style="font-weight: bold; color: #6F4E37;"><?= $no++ ?></td>
+                                <td>
+                                    <div style="font-weight: 600;"><?= htmlspecialchars($top['nama_member']) ?></div>
+                                    <span class="badge-level"><?= htmlspecialchars($top['nama_level'] ?? 'Member') ?></span>
+                                </td>
+                                <td><?= number_format($top['jumlah_kunjungan']) ?>x</td>
+                                <td style="font-weight: bold; color: #10b981;">Rp <?= number_format($top['total_belanja'], 0, ',', '.') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 20px; color: #888;">Belum ada data transaksi pelanggan.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="table-panel">
-        <div class="table-panel-title">
-            <span>⚠️ Pelanggan Pasif (> 30 Hari)</span>
-        </div>
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th>Nama Pelanggan</th>
-                    <th>No. WhatsApp</th>
-                    <th>Terakhir Transaksi</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($pelanggan_pasif)): ?>
-                    <?php foreach ($pelanggan_pasif as $pasif): ?>
-                        <tr>
-                            <td style="font-weight: 600;"><?= htmlspecialchars($pasif['nama_member']) ?></td>
-                            <td>
-                                <a href="https://wa.me/<?= $pasif['no_telp'] ?>" target="_blank" style="color: #25D366; text-decoration: none; font-size: 13px; font-weight: bold;">
-                                    <?= htmlspecialchars($pasif['no_telp']) ?>
-                                </a>
-                            </td>
-                            <td style="font-size: 13px; color: #666;">
-                                <?= date('d M Y', strtotime($pasif['kunjungan_terakhir'])) ?>
-                            </td>
-                            <td>
-                                <?php if ($pasif['jumlah_hari'] >= 60): ?>
-                                    <span class="badge-danger"><?= $pasif['jumlah_hari'] ?> Hari</span>
-                                <?php else: ?>
-                                    <span class="badge-warning"><?= $pasif['jumlah_hari'] ?> Hari</span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
+        <div class="table-panel">
+            <div class="table-panel-title">
+                <span>⚠️ Pelanggan Pasif (> 30 Hari)</span>
+            </div>
+            <table class="table-custom">
+                <thead>
                     <tr>
-                        <td colspan="4" style="text-align: center; padding: 20px; color: #888;">Semua pelanggan aktif bertransaksi bulan ini. Luar biasa!</td>
+                        <th>Nama Pelanggan</th>
+                        <th>No. WhatsApp</th>
+                        <th>Terakhir Transaksi</th>
+                        <th>Status</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (!empty($pelanggan_pasif)): ?>
+                        <?php foreach ($pelanggan_pasif as $pasif): ?>
+                            <tr>
+                                <td style="font-weight: 600;"><?= htmlspecialchars($pasif['nama_member']) ?></td>
+                                <td>
+                                    <a href="https://wa.me/<?= $pasif['no_telp'] ?>" target="_blank" style="color: #25D366; text-decoration: none; font-size: 13px; font-weight: bold;">
+                                        <?= htmlspecialchars($pasif['no_telp']) ?>
+                                    </a>
+                                </td>
+                                <td style="font-size: 13px; color: #666;">
+                                    <?= date('d M Y', strtotime($pasif['kunjungan_terakhir'])) ?>
+                                </td>
+                                <td>
+                                    <?php if ($pasif['jumlah_hari'] >= 60): ?>
+                                        <span class="badge-danger"><?= $pasif['jumlah_hari'] ?> Hari</span>
+                                    <?php else: ?>
+                                        <span class="badge-warning"><?= $pasif['jumlah_hari'] ?> Hari</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 20px; color: #888;">Semua pelanggan aktif bertransaksi bulan ini. Luar biasa!</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

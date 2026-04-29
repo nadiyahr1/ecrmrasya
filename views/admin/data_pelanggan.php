@@ -42,6 +42,7 @@
         font-size: 13px;
         color: #555;
         border-bottom: 1px solid #ddd;
+        white-space: nowrap;
     }
 
     .table-pelanggan td {
@@ -50,6 +51,7 @@
         color: #333;
         border-bottom: 1px solid #eee;
         vertical-align: middle;
+        white-space: nowrap;
     }
 
     .table-pelanggan tr:hover {

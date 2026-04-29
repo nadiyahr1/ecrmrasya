@@ -68,6 +68,7 @@
         text-align: left;
         font-size: 13px;
         border-bottom: 1px solid #eee;
+        white-space: nowrap;
     }
 
     .table-ulasan td {
@@ -75,6 +76,7 @@
         border-bottom: 1px solid #eee;
         font-size: 14px;
         vertical-align: top;
+        white-space: nowrap;
     }
 
     .btn-reply {
@@ -114,7 +116,7 @@
     <form method="GET" action="index.php" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
         <input type="hidden" name="controller" value="admin">
         <input type="hidden" name="action" value="ulasan">
-        
+
         <div style="color: #555; font-size: 14px;">
             Tampilkan
             <select name="limit" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; cursor: pointer; margin: 0 5px;">
@@ -125,8 +127,8 @@
         </div>
 
         <div style="display: flex; gap: 5px;">
-            <input type="text" name="search" placeholder="Cari ulasan atau pelanggan..." value="<?= htmlspecialchars($search) ?>" 
-                   style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+            <input type="text" name="search" placeholder="Cari ulasan atau pelanggan..." value="<?= htmlspecialchars($search) ?>"
+                style="padding: 10px 15px; width: 250px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
             <button type="submit" style="padding: 10px 20px; background: #6F4E37; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
                 Cari
             </button>
@@ -134,69 +136,71 @@
     </form>
 </div>
 
-<table class="table-ulasan">
-    <thead>
-        <tr>
-            <th width="20">No</th>
-            <th width="80">Tanggal</th>
-            <th width="120">ID Pesanan</th>
-            <th width="150">Pelanggan</th>
-            <th>Komentar & Balasan</th>
-            <th width="90" style="text-align: center;">Tampil (Web)</th>
-            <th width="120">Opsi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = 1;
-        foreach ($ulasan as $u): ?>
+<div style="overflow-x: auto; width: 100%; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+    <table class="table-ulasan">
+        <thead>
             <tr>
-                <td><?= $no++ ?></td>
-                <td><?= date('d/m/Y', strtotime($u['tgl_ulasan'])) ?></td>
-                <td><strong>#<?= htmlspecialchars($u['id_pesanan']) ?></strong></td>
-                <td><?= htmlspecialchars($u['nama_member'] ?: 'Member Terhapus') ?></td>
-                <td>
-                    <div class="ulasan-box">
-                        <strong>Komentar:</strong><br>
-                        <?= nl2br(htmlspecialchars($u['komentar'])) ?>
-                    </div>
-
-                    <?php if (!empty($u['balasan_admin'])): ?>
-                        <div class="balasan-box">
-                            <strong>Balasan Rasya.co:</strong><br>
-                            <?= nl2br(htmlspecialchars($u['balasan_admin'])) ?>
-                        </div>
-                    <?php endif; ?>
-                </td>
-                <td align="center">
-                    <?php if ($u['status_tampil'] == 'Y'): ?>
-                        <span class="badge-y">Ditampilkan</span>
-                    <?php else: ?>
-                        <span class="badge-n">Disembunyikan</span>
-                    <?php endif; ?>
-                </td>
-                <td style="white-space: nowrap;">
-                    <button type="button" class="btn-icon btn-reply" title="Balas Ulasan Ini" onclick="balasUlasan('<?= $u['id_ulasan'] ?>', '<?= addslashes(htmlspecialchars($u['balasan_admin'] ?? '')) ?>')">
-                        <i class="fa-solid fa-comment-dots"></i>
-                    </button>
-
-                    <?php if ($u['status_tampil'] == 'Y'): ?>
-                        <a href="index.php?controller=admin&action=toggle_ulasan&id=<?= $u['id_ulasan'] ?>&status=N" class="btn-icon btn-toggle" style="background: #fef3c7; color: #92400e;" title="Sembunyikan dari Publik">
-                            <i class="fa-solid fa-eye-slash"></i>
-                        </a>
-                    <?php else: ?>
-                        <a href="index.php?controller=admin&action=toggle_ulasan&id=<?= $u['id_ulasan'] ?>&status=Y" class="btn-icon btn-toggle" style="background: #dcfce7; color: #166534;" title="Tampilkan ke Publik">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <a href="index.php?controller=admin&action=hapus_ulasan&id=<?= $u['id_ulasan'] ?>" class="btn-icon btn-delete-icon" title="Hapus Ulasan" onclick="return confirm('Yakin ingin menghapus ulasan ini secara permanen?')">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </a>
-                </td>
+                <th width="20">No</th>
+                <th width="80">Tanggal</th>
+                <th width="120">ID Pesanan</th>
+                <th width="150">Pelanggan</th>
+                <th>Komentar & Balasan</th>
+                <th width="90" style="text-align: center;">Tampil (Web)</th>
+                <th width="120">Opsi</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php $no = 1;
+            foreach ($ulasan as $u): ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= date('d/m/Y', strtotime($u['tgl_ulasan'])) ?></td>
+                    <td><strong>#<?= htmlspecialchars($u['id_pesanan']) ?></strong></td>
+                    <td><?= htmlspecialchars($u['nama_member'] ?: 'Member Terhapus') ?></td>
+                    <td>
+                        <div class="ulasan-box">
+                            <strong>Komentar:</strong><br>
+                            <?= nl2br(htmlspecialchars($u['komentar'])) ?>
+                        </div>
+
+                        <?php if (!empty($u['balasan_admin'])): ?>
+                            <div class="balasan-box">
+                                <strong>Balasan Rasya.co:</strong><br>
+                                <?= nl2br(htmlspecialchars($u['balasan_admin'])) ?>
+                            </div>
+                        <?php endif; ?>
+                    </td>
+                    <td align="center">
+                        <?php if ($u['status_tampil'] == 'Y'): ?>
+                            <span class="badge-y">Ditampilkan</span>
+                        <?php else: ?>
+                            <span class="badge-n">Disembunyikan</span>
+                        <?php endif; ?>
+                    </td>
+                    <td style="white-space: nowrap;">
+                        <button type="button" class="btn-icon btn-reply" title="Balas Ulasan Ini" onclick="balasUlasan('<?= $u['id_ulasan'] ?>', '<?= addslashes(htmlspecialchars($u['balasan_admin'] ?? '')) ?>')">
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </button>
+
+                        <?php if ($u['status_tampil'] == 'Y'): ?>
+                            <a href="index.php?controller=admin&action=toggle_ulasan&id=<?= $u['id_ulasan'] ?>&status=N" class="btn-icon btn-toggle" style="background: #fef3c7; color: #92400e;" title="Sembunyikan dari Publik">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </a>
+                        <?php else: ?>
+                            <a href="index.php?controller=admin&action=toggle_ulasan&id=<?= $u['id_ulasan'] ?>&status=Y" class="btn-icon btn-toggle" style="background: #dcfce7; color: #166534;" title="Tampilkan ke Publik">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        <?php endif; ?>
+
+                        <a href="index.php?controller=admin&action=hapus_ulasan&id=<?= $u['id_ulasan'] ?>" class="btn-icon btn-delete-icon" title="Hapus Ulasan" onclick="return confirm('Yakin ingin menghapus ulasan ini secara permanen?')">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
     <div style="font-size: 14px; color: #666;">
@@ -208,8 +212,8 @@
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
-            <a href="index.php?controller=admin&action=ulasan&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>" 
-               style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
+            <a href="index.php?controller=admin&action=ulasan&halaman=<?= $i ?>&search=<?= urlencode($search) ?>&limit=<?= $limit ?>"
+                style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; font-size: 14px; <?= ($i == $halaman_aktif) ? 'background: #6F4E37; color: white; border-color: #6F4E37;' : 'background: white;' ?>">
                 <?= $i ?>
             </a>
         <?php endfor; ?>
